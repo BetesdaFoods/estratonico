@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 
 const toSeconds = (v: unknown): number => {
@@ -12,7 +12,7 @@ const toSeconds = (v: unknown): number => {
   return 0;
 };
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const albumId = searchParams.get("albumId") || undefined;
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const contentType = req.headers.get("content-type") || "";
     let body: any = {};

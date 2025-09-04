@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { deleteGenre, fetchGenreById, updateGenre } from "@/lib/data";
 
-type Params = { params: { id: string } };
-
-export async function GET(_: NextRequest, { params }: Params) {
+export async function GET(_: Request, ctx: unknown) {
+  const { params } = ctx as { params: { id: string } };
   try {
     const genre = await fetchGenreById(params.id);
     return NextResponse.json(genre);
@@ -14,7 +13,8 @@ export async function GET(_: NextRequest, { params }: Params) {
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: Params) {
+export async function PATCH(req: Request, ctx: unknown) {
+  const { params } = ctx as { params: { id: string } };
   try {
     const body = await req.json().catch(() => ({}));
     const name = typeof body?.name === "string" ? body.name : "";
@@ -34,7 +34,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   }
 }
 
-export async function DELETE(_: NextRequest, { params }: Params) {
+export async function DELETE(_: Request, ctx: unknown) {
+  const { params } = ctx as { params: { id: string } };
   try {
     const result = await deleteGenre(params.id);
     return NextResponse.json(result);

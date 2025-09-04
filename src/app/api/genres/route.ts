@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createGenre, fetchGenres } from "@/lib/data";
 
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const name = typeof body?.name === "string" ? body.name : "";

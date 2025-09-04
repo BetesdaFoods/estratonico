@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 
 const toSeconds = (v: unknown): number => {
@@ -12,7 +12,7 @@ const toSeconds = (v: unknown): number => {
   return 0;
 };
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const { albumId, songs } = await req.json();
 
