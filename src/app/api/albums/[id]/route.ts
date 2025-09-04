@@ -86,7 +86,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     // Normalizar platforms (si viene, reemplaza todas)
     let platformsOps:
       | {
-          deleteMany: {};
+          deleteMany: Record<string, never>;
           create: { name: string; url: string }[];
         }
       | undefined = undefined;
