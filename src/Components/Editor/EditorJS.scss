@@ -1,0 +1,12 @@
+.codex-editor__redactor {
+	flex-grow: 1;
+	margin-right: 0 !important;
+}
+
+.ce-block__content,
+.ce-toolbar__content {
+	max-width: calc(100% - 125px) !important;
+}
+.cdx-block {
+	max-width: 100% !important;
+}

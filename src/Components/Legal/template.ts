@@ -1,0 +1,17 @@
+const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nec lectus eget risus egestas posuere id et magna. Suspendisse potenti. Proin nisi enim, pretium ac mi ut, sagittis molestie mauris. Fusce euismod arcu at nibh fringilla, accumsan finibus quam ultrices. Quisque id tincidunt tellus. Donec non iaculis ipsum, ut posuere erat. Mauris sollicitudin accumsan dui sit amet vulputate. Pellentesque aliquam varius consectetur. Morbi ornare eu nibh at auctor. Vivamus non varius sem, ut scelerisque ex. Nulla facilisi.
+
+Duis nunc dolor, efficitur venenatis libero vestibulum, lacinia aliquet mi. Duis ut ultricies enim. Fusce lobortis nec metus at varius. Duis tincidunt accumsan congue. Maecenas rutrum mollis nibh quis pretium. Mauris pellentesque dictum nisi, in convallis ex accumsan sit amet. In rhoncus tincidunt nulla et gravida. Morbi eros justo, auctor sed arcu non, molestie hendrerit ante. Aliquam commodo, tellus eu sollicitudin aliquam, mi diam efficitur leo, tincidunt dapibus lorem lacus nec lorem. Nam congue porttitor ante.
+
+Aliquam in risus consectetur, molestie erat eu, porta odio. Duis eu consequat purus. In dignissim, sem vitae tincidunt luctus, quam velit ullamcorper risus, ut fringilla lorem lacus quis erat. Suspendisse nec mauris aliquam, bibendum turpis ac, pharetra elit. Nam eu neque egestas, rhoncus leo at, sollicitudin velit. Nunc ultricies ultricies fermentum. 
+
+Duis semper auctor tortor ut tincidunt. Aliquam gravida dolor et egestas molestie. Fusce hendrerit leo et turpis aliquet, id ullamcorper nulla iaculis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+
+Donec eu consectetur sem, eget mollis metus. Integer vitae varius ante, sit amet accumsan quam. Donec commodo dictum nunc, sit amet ultricies augue pretium at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+
+ Nam tristique arcu ut lectus porta molestie. Quisque molestie, sapien vitae pretium consectetur, erat lectus porttitor enim, in varius nibh metus id tortor. Aliquam dictum quam ante, sit amet faucibus dui egestas in. Sed ultricies mauris nisi, sed sagittis libero pharetra sed. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed sed felis interdum ante venenatis ullamcorper. Vivamus varius vel nunc quis interdum. Aliquam erat volutpat. Quisque ac commodo lacus. Sed mollis sagittis laoreet.
+
+Nulla eu tempor tellus, ut vehicula neque. Fusce interdum, nulla et congue mollis, mi est interdum ipsum, non scelerisque quam sapien sed velit. Integer pulvinar porttitor erat. Nullam urna est, mattis mollis fringilla sit amet, euismod id sem. Quisque imperdiet est eget nulla ultricies dictum. Nullam sit amet ipsum dignissim, venenatis lorem eu, volutpat eros. Sed vestibulum, eros sed cursus gravida, libero risus lacinia sem, sed volutpat ante odio id ipsum. Sed sit amet tincidunt mi, ut cursus urna. Etiam vitae tortor sollicitudin, volutpat lectus nec, fringilla neque. Morbi dolor tortor, facilisis et tempor cursus, dapibus sed lacus. Maecenas sit amet quam consequat, sagittis elit quis, dignissim dolor.`;
+
+const date = new Date("2024-12-19T16:00:00Z");
+
+export { description, date };

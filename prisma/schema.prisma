@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ArticleType {
+  Main
+  Secondary
+  Normal
+}
+
+model articles {
+  id         String      @id @default(uuid())
+  title      String
+  coverImage String
+  summary    String
+  content    String
+  author     String
+  createdAt  DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime    @default(now()) @db.Timestamp(6)
+  deletedAt  DateTime?   @db.Timestamp(6)
+  type       ArticleType @default(Normal)
+}
+
+model newsletterSubscribers {
+  email String @id
+
+  @@map("newsletter_subscribers")
+}
+
+model Genre {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  albums Album[]
+}
+
+model Platform {
+  id      String  @id @default(uuid())
+  name    String
+  url     String
+  album   Album?  @relation(fields: [albumId], references: [id], onDelete: Cascade) // <—
+  albumId String?
+  song    Song?   @relation(fields: [songId], references: [id], onDelete: Cascade)  // <—
+  songId  String?
+}
+
+model Album {
+  id          String     @id @default(uuid())
+  name        String
+  concept     String
+  coverImage  String?
+  createdAt   DateTime   @default(now()) @db.Timestamp(6)
+  status      AlbumStatus @default(DRAFT)
+  platforms   Platform[]
+  songs       Song[]
+  genres      Genre[]
+  project     Universe @default(NOVA)
+  publishedAt DateTime?   @db.Timestamp(6)
+}
+
+enum AlbumStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum Universe {
+  NOVA
+  NEXUS
+}
+
+model Song {
+  id        String   @id @default(uuid())
+  name      String
+  duration  Int
+  lyrics    String?
+  album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade) // <—
+  albumId   String
+  platforms Platform[]
+}
