@@ -1,9 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 
-type Params = { params: { id: string } };
-
-export async function GET(_req: NextRequest, { params }: Params) {
+export async function GET(_req: Request, { params }: { params: { id: string } }) {
   try {
     const album = await db.album.findUnique({
       where: { id: params.id },
@@ -19,7 +17,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: Params) {
+export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
     const contentType = req.headers.get("content-type") || "";
     let body: any = {};
