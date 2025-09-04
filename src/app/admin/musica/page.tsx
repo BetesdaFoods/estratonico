@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 // Server Action: recibe FormData y retorna void
-export async function deleteAlbumAction(formData: FormData) {
+async function deleteAlbumAction(formData: FormData) {  
   "use server";
   const id = String(formData.get("id") || "");
   if (!id) return;
