@@ -4,9 +4,11 @@ import { useEffect, useMemo, useState, JSX } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { useEffect as useEffectSync } from 'react';
 
-type Genre = { id: string; name: string };
-type PlatformLink = { name: string; url: string };
+type PlatformLink = { name: string; url: string }
 type Universe = "NOVA" | "NEXUS";
 
 const PLATFORM_ICONS: Record<string, JSX.Element> = {
@@ -16,6 +18,7 @@ const PLATFORM_ICONS: Record<string, JSX.Element> = {
   "Amazon Music": <Image src="/assets/blacks/amazon-footer.svg" alt="Amazon Music" width={20} height={20} />,
 };
 const SONG_PLATFORMS = Object.keys(PLATFORM_ICONS);
+const MANDATORY_PLATFORMS = ["Spotify","Apple Music","YouTube","Amazon Music"] as const;
 
 type SongDraft = {
   id: string;
@@ -53,7 +56,7 @@ function toDDMMYYYY(date: string | Date) {
   return `${dd}/${mm}/${yyyy}`;
 }
 function formatDurationInput(raw: string) {
-  const digits = raw.replace(/\D/g, "").slice(0, 4);
+  const digits = raw.replace(/\D/g, "").slice(0, 4); // mmss
   const mm = digits.slice(0, Math.min(2, digits.length));
   const ss = digits.length > 2 ? digits.slice(2, 4) : "";
   return ss ? `${mm.padStart(2, "0")}:${ss.padStart(2, "0")}` : mm;
@@ -81,6 +84,49 @@ function fromUTCToUTCMinus4(date: string | Date): { dateStr: string; timeStr: st
   return { dateStr: `${y}-${m}-${dd}`, timeStr: `${hh}:${mm}` };
 }
 
+// Rich Text Editor reutilizable (igual que en crear)
+function RichTextEditor({ value, onChange, placeholder, minHeight = '180px' }: { value: any; onChange: (json: any, html: string, text: string) => void; placeholder?: string; minHeight?: string; }) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: value || null,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getJSON(), editor.getHTML(), editor.getText());
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm max-w-none focus:outline-none px-3 py-2 text-black',
+      },
+    },
+  });
+
+  useEffectSync(() => {
+    if (!editor) return;
+    if (value) {
+      try { editor.commands.setContent(value); } catch { /* ignore */ }
+    } else if (value === null) {
+      editor.commands.clearContent();
+    }
+  }, [value, editor]);
+
+  const showPlaceholder = !editor?.isFocused && editor?.getText().length === 0;
+  return (
+    <div className="border rounded bg-white text-black">
+      <div className="flex flex-wrap gap-1 border-b px-2 py-1 bg-gray-100 text-xs">
+        <button type="button" onMouseDown={(e)=>{e.preventDefault(); editor?.chain().focus().toggleBold().run();}} className={`px-2 py-1 rounded text-gray-700 ${editor?.isActive('bold') ? 'bg-purple-600 text-white' : 'hover:bg-gray-200'}`}>B</button>
+        <button type="button" onMouseDown={(e)=>{e.preventDefault(); editor?.chain().focus().toggleItalic().run();}} className={`px-2 py-1 rounded italic text-gray-700 ${editor?.isActive('italic') ? 'bg-purple-600 text-white' : 'hover:bg-gray-200'}`}>I</button>
+        <button type="button" onMouseDown={(e)=>{e.preventDefault(); editor?.chain().focus().undo().run();}} className="px-2 py-1 rounded text-gray-700 hover:bg-gray-200">↺</button>
+        <button type="button" onMouseDown={(e)=>{e.preventDefault(); editor?.chain().focus().redo().run();}} className="px-2 py-1 rounded text-gray-700 hover:bg-gray-200">↻</button>
+      </div>
+      <div className="relative" style={{minHeight}}>
+        {showPlaceholder && placeholder && (
+          <div className="absolute top-2 left-3 text-gray-400 pointer-events-none select-none text-sm">{placeholder}</div>
+        )}
+        <EditorContent editor={editor} />
+      </div>
+    </div>
+  );
+}
+
 export default function UpdateAlbumPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -103,17 +149,13 @@ export default function UpdateAlbumPage() {
   const [name, setName] = useState("");
   const [createdAt, setCreatedAt] = useState(""); // dd/mm/yyyy
   const [concept, setConcept] = useState("");
-
-  // Géneros
-  const [genres, setGenres] = useState<Genre[]>([]);
-  const [selectedGenreIds, setSelectedGenreIds] = useState<string[]>([]);
-  const [genreToAdd, setGenreToAdd] = useState("");
-  const [showAddGenre, setShowAddGenre] = useState(false);
-  const [newGenre, setNewGenre] = useState("");
+  const [conceptRich, setConceptRich] = useState<any>(null);
 
   // Plataformas (álbum)
   const [platformLinks, setPlatformLinks] = useState<PlatformLink[]>([]);
-  const [selectedPlatform, setSelectedPlatform] = useState("");
+  const [selectedPlatform, setSelectedPlatform] = useState(""); // legacy (no se usa ahora)
+  const [newPlatformName, setNewPlatformName] = useState("");
+  const [newPlatformUrl, setNewPlatformUrl] = useState("");
 
   // Tracklist
   const [songs, setSongs] = useState<SongDraft[]>([]);
@@ -121,11 +163,19 @@ export default function UpdateAlbumPage() {
   const [songEditorOpen, setSongEditorOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [songForm, setSongForm] = useState<SongDraft>({ id: "", name: "", duration: "00:00", lyrics: "", links: [] });
+  const [newSongPlatformName, setNewSongPlatformName] = useState("");
+  const [newSongPlatformUrl, setNewSongPlatformUrl] = useState("");
 
-  // Cargar catálogos y datos iniciales
-  useEffect(() => {
-    axios.get("/api/genres").then((res) => setGenres(res.data)).catch(() => {});
-  }, []);
+  // Replace old genre relation state with new string[] approach
+  const COMMON_GENRES = [
+    'Pop','Rock','Hip Hop','Rap','R&B','Reggaeton','Electronic','Dance','Country','Jazz',
+    'Blues','Classical','Metal','Punk','Indie','Latin','Folk','Soul','Trap','House'
+  ];
+  const [genreNames, setGenreNames] = useState<string[]>([]);
+  const [genreSelect, setGenreSelect] = useState('');
+  const [customGenre, setCustomGenre] = useState('');
+
+  // Cargar datos iniciales (eliminar fetch /api/genres)
   useEffect(() => {
     if (!albumId) return;
     axios.get(`/api/albums/${albumId}`)
@@ -136,16 +186,23 @@ export default function UpdateAlbumPage() {
         setConcept(a.concept || "");
         if (a.coverImage) setCoverPreview(a.coverImage);
         setCreatedAt(a.createdAt ? toDDMMYYYY(a.createdAt) : "");
-        // Prefill programación si existe publishedAt
         if (a.publishedAt) {
           const { dateStr, timeStr } = fromUTCToUTCMinus4(a.publishedAt);
-          setScheduleOn(true);
-          setScheduleDate(dateStr);
-          setScheduleTime(timeStr);
+            setScheduleOn(true);
+            setScheduleDate(dateStr);
+            setScheduleTime(timeStr);
         }
-        // géneros
-        if (Array.isArray(a.genres)) setSelectedGenreIds(a.genres.map((g: any) => g.id));
-        // plataformas
+        // Géneros: usar a.genreNames si existe; fallback a nombres de a.genres
+        if (Array.isArray(a.genreNames) && a.genreNames.length > 0) {
+          setGenreNames(a.genreNames.filter((g: any) => typeof g === 'string' && g.trim()).map((g: string) => g.trim()));
+        } else if (Array.isArray(a.genres)) {
+          setGenreNames(a.genres.map((g: any) => g.name).filter((g: any) => typeof g === 'string' && g.trim()));
+        }
+        if (a.conceptRich) {
+          try { setConceptRich(typeof a.conceptRich === 'string' ? JSON.parse(a.conceptRich) : a.conceptRich); } catch { setConceptRich(null); }
+        } else if (a.concept) {
+          setConceptRich({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: a.concept }] }] });
+        }
         if (Array.isArray(a.platforms)) {
           setPlatformLinks(
             a.platforms
@@ -160,7 +217,6 @@ export default function UpdateAlbumPage() {
         router.push("/admin/musica");
       });
 
-    // Canciones
     axios.get(`/api/songs?albumId=${albumId}`)
       .then((res) => {
         const arr = Array.isArray(res.data) ? res.data : [];
@@ -171,9 +227,7 @@ export default function UpdateAlbumPage() {
             name: s.name,
             duration: secondsToMMSS(s.duration),
             lyrics: s.lyrics || "",
-            links: Array.isArray(s.platforms)
-              ? s.platforms.map((p: any) => ({ name: p.name, url: p.url }))
-              : [],
+            links: Array.isArray(s.platforms) ? s.platforms.map((p: any) => ({ name: p.name, url: p.url })) : [],
           }))
         );
       })
@@ -189,25 +243,33 @@ export default function UpdateAlbumPage() {
     }
   }, [coverImage]);
 
-  // Helpers géneros / plataformas
-  const availableGenres = genres.filter((g) => !selectedGenreIds.includes(g.id));
-  const getAvailablePlatforms = () => {
-    const used = platformLinks.map((l) => l.name);
-    return Object.keys(PLATFORM_ICONS).filter((p) => !used.includes(p));
+  // Helpers para géneros string[]
+  const addGenre = (name: string) => {
+    const g = name.trim();
+    if (!g) return;
+    const exists = genreNames.some((x) => x.toLowerCase() === g.toLowerCase());
+    if (!exists) setGenreNames((prev) => [...prev, g]);
   };
+  const removeGenre = (g: string) => setGenreNames((prev) => prev.filter((x) => x !== g));
+  const availableCommonGenres = COMMON_GENRES.filter((g) => !genreNames.some((x) => x.toLowerCase() === g.toLowerCase()));
 
-  // Tracklist helpers
+  // Tracklist helpers (restored)
   const openNewSong = () => {
     setEditingIndex(null);
-    setSongForm({ id: "", name: "", duration: "00:00", lyrics: "", links: [] });
+    const mandatory = MANDATORY_PLATFORMS.map(n=>({ name:n, url:"" }));
+    setSongForm({ id: "", name: "", duration: "00:00", lyrics: "", links: mandatory });
     setSongEditorOpen(true);
   };
   const openEditSong = (idx: number) => {
     setEditingIndex(idx);
-    setSongForm({ ...songs[idx] });
+    const base = [...songs[idx].links];
+    MANDATORY_PLATFORMS.forEach(m => { if (!base.find(l=> l.name.toLowerCase()===m.toLowerCase())) base.push({ name:m, url:"" }); });
+    setSongForm({ ...songs[idx], links: base });
     setSongEditorOpen(true);
   };
   const saveSong = () => {
+    const missing = MANDATORY_PLATFORMS.filter(m => !songForm.links.find(l=> l.name.toLowerCase()===m.toLowerCase() && l.url.trim()));
+    if (missing.length) { alert("Completa las URLs obligatorias de la canción: " + missing.join(", ")); return; }
     const normalized: SongDraft = {
       ...songForm,
       id: songForm.id || `tmp_${Date.now()}_${Math.random().toString(36).slice(2)}`,
@@ -227,7 +289,13 @@ export default function UpdateAlbumPage() {
   };
   const deleteSongLocal = (idx: number) => setSongs((p) => p.filter((_, i) => i !== idx));
 
-  // Construye publishedAt según el interruptor (UTC-4)
+  // Plataformas disponibles helper
+  const getAvailablePlatforms = () => {
+    const used = platformLinks.map((l) => l.name);
+    return Object.keys(PLATFORM_ICONS).filter((p) => !used.includes(p));
+  };
+
+  // Construye publishedAt (restored)
   const buildPublishedAt = (): Date | null => {
     if (!scheduleOn) return null;
     const dt = toUTCFromUTCMinus4(scheduleDate, scheduleTime);
@@ -243,10 +311,12 @@ export default function UpdateAlbumPage() {
     if (!albumId) return;
 
     const createdAtDate = parseDDMMYYYY(createdAt);
-    if (!name || !createdAtDate || !concept || selectedGenreIds.length === 0) {
+    if (!name || !createdAtDate || !concept || genreNames.length === 0) {
       alert("Completa todos los campos obligatorios. La fecha debe ser dd/mm/yyyy y al menos un género.");
       return;
     }
+    const missingAlbumPlatforms = MANDATORY_PLATFORMS.filter(m => !platformLinks.find(p=> p.name.toLowerCase()===m.toLowerCase() && p.url.trim()));
+    if (missingAlbumPlatforms.length) { alert("Completa las URLs obligatorias del álbum: " + missingAlbumPlatforms.join(", ")); return; }
 
     if (scheduleOn && (!scheduleDate || !scheduleTime)) {
       alert("Para programar la publicación, indica fecha y hora (UTC-4).");
@@ -269,11 +339,12 @@ export default function UpdateAlbumPage() {
     const payload: any = {
       name,
       concept,
+      conceptRich,
       coverImage: coverImageUrl,
       createdAt: createdAtDate,
-      genreIds: selectedGenreIds,
+      genreNames, // updated
       platforms: platformLinks.filter((l) => l.name && l.url),
-      project: universe, // NOVA | NEXUS
+      project: universe,
       status: mode === "publish" ? "PUBLISHED" : "DRAFT",
       publishedAt,
     };
@@ -474,98 +545,66 @@ export default function UpdateAlbumPage() {
               <div className="w-full max-w-2xl mx-auto flex flex-col gap-4">
                 <div className="flex flex-col gap-1 w-full">
                   <label className="font-semibold text-sm text-black">Reseña/Descripción del álbum</label>
-                  <textarea
-                    placeholder="Reseña/Descripción del álbum"
-                    className="border rounded px-3 py-2 w-full text-sm !text-black placeholder:text-gray-500"
-                    rows={4}
-                    value={concept}
-                    onChange={(e) => setConcept(e.target.value)}
-                    required
+                  <RichTextEditor
+                    value={conceptRich}
+                    onChange={(json, html, text) => { setConceptRich(json); setConcept(text); }}
+                    placeholder="Escribe la descripción..."
                   />
                 </div>
-
-                {/* Géneros múltiples */}
                 <div className="flex flex-col gap-2 w-full">
                   <label className="font-semibold text-sm text-black">Géneros musicales</label>
-
-                  {/* chips */}
                   <div className="flex flex-wrap gap-2">
-                    {selectedGenreIds.map((id) => {
-                      const g = genres.find((x) => x.id === id);
-                      if (!g) return null;
-                      return (
-                        <span key={id} className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 border border-purple-200 rounded-full px-3 py-1 text-xs">
-                          {g.name}
-                          <button type="button" className="text-purple-700" onClick={() => setSelectedGenreIds((prev) => prev.filter((x) => x !== id))}>×</button>
-                        </span>
-                      );
-                    })}
+                    {genreNames.map((g) => (
+                      <span key={g} className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 border border-purple-200 rounded-full px-3 py-1 text-xs">
+                        {g}
+                        <button type="button" className="text-purple-700" onClick={() => removeGenre(g)}>×</button>
+                      </span>
+                    ))}
+                    {genreNames.length === 0 && <span className="text-xs text-gray-400">Selecciona o agrega géneros</span>}
                   </div>
-
-                  {/* selector + agregar */}
-                  <div className="w-full flex justify-start">
+                  <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-2">
                       <select
                         className="border rounded px-3 py-2 text-xs bg-white !text-black"
-                        value={genreToAdd}
-                        onChange={(e) => setGenreToAdd(e.target.value)}
-                        disabled={availableGenres.length === 0}
+                        value={genreSelect}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '') { setGenreSelect(''); return; }
+                          if (val === '__custom') { setGenreSelect(val); return; }
+                          addGenre(val);
+                          setGenreSelect('');
+                        }}
                       >
-                        <option value="">{availableGenres.length === 0 ? "No hay más géneros" : "Agregar género"}</option>
-                        {availableGenres.map((g) => (
-                          <option key={g.id} value={g.id}>{g.name}</option>
+                        <option value="">Agregar género</option>
+                        {availableCommonGenres.map((g) => (
+                          <option key={g} value={g}>{g}</option>
                         ))}
+                        <option value="__custom">Agregar otro género...</option>
                       </select>
-                      <button
-                        type="button"
-                        className="border border-purple-400 text-purple-500 rounded px-4 py-2 text-xs font-medium hover:bg-purple-50 disabled:opacity-50"
-                        onClick={() => {
-                          if (!genreToAdd) return;
-                          setSelectedGenreIds((prev) => [...prev, genreToAdd]);
-                          setGenreToAdd("");
-                        }}
-                        disabled={!genreToAdd}
-                      >
-                        Agregar
-                      </button>
                     </div>
+                    {genreSelect === '__custom' && (
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          className="border rounded px-2 py-1 text-sm !text-black placeholder:text-gray-500"
+                          placeholder="Nuevo género"
+                          value={customGenre}
+                          onChange={(e) => setCustomGenre(e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className="border border-purple-400 text-purple-500 rounded px-3 py-1 text-xs font-medium hover:bg-purple-50 disabled:opacity-50"
+                          onClick={() => { addGenre(customGenre); setCustomGenre(''); setGenreSelect(''); }}
+                          disabled={!customGenre.trim()}
+                        >
+                          Añadir
+                        </button>
+                        <button type="button" className="text-red-600 text-xs" onClick={() => { setGenreSelect(''); setCustomGenre(''); }}>
+                          Cancelar
+                        </button>
+                      </div>
+                    )}
                   </div>
-
-                  {/* crear nuevo género */}
-                  <button
-                    type="button"
-                    className="self-start border border-purple-400 text-purple-500 rounded px-3 py-1 text-xs font-medium hover:bg-purple-50"
-                    onClick={() => setShowAddGenre(true)}
-                  >
-                    Agregar género
-                  </button>
-
-                  {showAddGenre && (
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        className="border rounded px-2 py-1 text-sm !text-black placeholder:text-gray-500"
-                        placeholder="Nuevo género"
-                        value={newGenre}
-                        onChange={(e) => setNewGenre(e.target.value)}
-                      />
-                      <button
-                        type="button"
-                        className="text-green-600 text-xs"
-                        onClick={async () => {
-                          if (!newGenre.trim()) return;
-                          const res = await axios.post("/api/genres", { name: newGenre.trim() }, { headers: { "Content-Type": "application/json" } });
-                          setGenres((prev) => [...prev, res.data]);
-                          setSelectedGenreIds((prev) => [...prev, res.data.id]);
-                          setShowAddGenre(false);
-                          setNewGenre("");
-                        }}
-                      >
-                        Guardar
-                      </button>
-                      <button type="button" className="text-red-600 text-xs" onClick={() => setShowAddGenre(false)}>Cancelar</button>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -573,59 +612,67 @@ export default function UpdateAlbumPage() {
             {/* Plataformas álbum */}
             <div className="col-span-2 w-full">
               <div className="w-full max-w-2xl mx-auto">
-                {platformLinks.length === 0 && <div className="text-black font-semibold text-sm mb-2">URLs</div>}
-
-                {platformLinks.map((link, idx) => (
-                  <div key={idx} className="mb-3">
-                    <div className="text-black font-semibold text-sm mb-1">{`URL ${link.name}`}</div>
-                    <div className="grid grid-cols-[44px_1fr_auto] gap-2 items-center">
-                      <div className="flex justify-center items-center w-11 h-11 rounded-md border bg-white">
-                        {PLATFORM_ICONS[link.name] || <span className="text-gray-400">+</span>}
+                <div className="text-black font-semibold text-sm mb-2">Plataformas (obligatorias y adicionales)</div>
+                {platformLinks.map((link, idx) => {
+                  const mandatory = MANDATORY_PLATFORMS.some(m => m.toLowerCase()===link.name.toLowerCase());
+                  return (
+                    <div key={idx} className="mb-3">
+                      <div className="text-black font-semibold text-sm mb-1">{`URL ${link.name}`}{mandatory && <span className="text-red-500 ml-1">*</span>}</div>
+                      <div className="grid grid-cols-[44px_1fr_auto] gap-2 items-center">
+                        <div className="flex justify-center items-center w-11 h-11 rounded-md border bg-white">
+                          {PLATFORM_ICONS[link.name] || <span className="text-gray-400">+</span>}
+                        </div>
+                        <input
+                          type="url"
+                          placeholder="https://"
+                          className="border rounded px-3 py-2 w-full text-sm !text-black placeholder:text-gray-400"
+                          value={link.url}
+                          onChange={(e) => {
+                            setPlatformLinks(prev => prev.map((p,i)=> i===idx ? { ...p, url: e.target.value } : p));
+                          }}
+                          required={mandatory}
+                        />
+                        <button type="button" className={`px-2 ${mandatory? 'opacity-30 cursor-not-allowed':'text-red-600'}`} onClick={() => {
+                          if (mandatory) return; 
+                          setPlatformLinks(prev => prev.filter((_,i)=> i!==idx));
+                        }} disabled={mandatory}>🗑️</button>
                       </div>
-                      <input
-                        type="url"
-                        placeholder="URL"
-                        className="border rounded px-3 py-2 w-full text-sm !text-black placeholder:text-gray-500"
-                        value={link.url}
-                        onChange={(e) => {
-                          const updated = [...platformLinks];
-                          updated[idx].url = e.target.value;
-                          setPlatformLinks(updated);
-                        }}
-                      />
-                      <button type="button" className="text-red-600 px-2" onClick={() => setPlatformLinks((l) => l.filter((_, i) => i !== idx))}>🗑️</button>
                     </div>
-                  </div>
-                ))}
-
-                {/* Agregar plataforma */}
-                <div className="w-full flex justify-start mt-6">
-                  <div className="flex items-center gap-2">
-                    <select
-                      className="border rounded px-3 py-2 text-xs bg-white !text-black"
-                      value={selectedPlatform}
-                      onChange={(e) => setSelectedPlatform(e.target.value)}
-                      disabled={getAvailablePlatforms().length === 0}
-                    >
-                      <option value="">{getAvailablePlatforms().length === 0 ? "No hay más plataformas" : "Agregar plataforma"}</option>
-                      {getAvailablePlatforms().map((name) => (
-                        <option key={name} value={name}>{name}</option>
-                      ))}
-                    </select>
+                  );
+                })}
+                <div className="mt-6 space-y-2">
+                  <div className="flex flex-col md:flex-row gap-2">
+                    <input
+                      type="text"
+                      className="border rounded px-3 py-2 text-sm !text-black flex-1"
+                      placeholder="Nombre plataforma"
+                      value={newPlatformName}
+                      onChange={(e)=> setNewPlatformName(e.target.value)}
+                    />
+                    <input
+                      type="url"
+                      className="border rounded px-3 py-2 text-sm !text-black flex-1"
+                      placeholder="https://url"
+                      value={newPlatformUrl}
+                      onChange={(e)=> setNewPlatformUrl(e.target.value)}
+                    />
                     <button
                       type="button"
                       className="border border-purple-400 text-purple-500 rounded px-4 py-2 text-xs font-medium hover:bg-purple-50 disabled:opacity-50"
+                      disabled={!newPlatformName.trim() || !newPlatformUrl.trim() || platformLinks.some(p=> p.name.toLowerCase()===newPlatformName.trim().toLowerCase()) || MANDATORY_PLATFORMS.some(m=> m.toLowerCase()===newPlatformName.trim().toLowerCase())}
                       onClick={() => {
-                        if (selectedPlatform && !platformLinks.find((l) => l.name === selectedPlatform)) {
-                          setPlatformLinks((prev) => [...prev, { name: selectedPlatform, url: "" }]);
-                          setSelectedPlatform("");
-                        }
+                        const name = newPlatformName.trim();
+                        const url = newPlatformUrl.trim();
+                        if (!name || !url) return;
+                        setPlatformLinks(prev => [...prev, { name, url }]);
+                        setNewPlatformName('');
+                        setNewPlatformUrl('');
                       }}
-                      disabled={!selectedPlatform}
                     >
-                      Agregar
+                      Añadir plataforma
                     </button>
                   </div>
+                  <p className="text-[10px] text-gray-500">Las plataformas marcadas con * son obligatorias.</p>
                 </div>
               </div>
             </div>
@@ -652,7 +699,6 @@ export default function UpdateAlbumPage() {
                 </div>
               </div>
             ))}
-
             <button type="button" onClick={openNewSong} className="self-start mt-2 border-2 border-dashed border-purple-400 text-purple-600 rounded-lg px-4 py-2 text-sm">
               Agregar canción
             </button>
@@ -677,7 +723,6 @@ export default function UpdateAlbumPage() {
           <div className="absolute inset-0 bg-black/50" onClick={() => setSongEditorOpen(false)} />
           <div className="relative bg-white rounded-2xl w-[min(900px,92vw)] max-h-[90vh] overflow-auto border-2 border-blue-400 p-4">
             <div className="text-lg font-semibold mb-2">{editingIndex === null ? "Agregar Canción" : "Editar Canción"}</div>
-
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <label className="block text-sm font-semibold mb-1">Nombre de Canción</label>
@@ -688,7 +733,6 @@ export default function UpdateAlbumPage() {
                   onChange={(e) => setSongForm((s) => ({ ...s, name: e.target.value }))}
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold mb-1">Duración</label>
                 <input
@@ -699,7 +743,6 @@ export default function UpdateAlbumPage() {
                   onChange={(e) => setSongForm((s) => ({ ...s, duration: formatDurationInput(e.target.value) }))}
                 />
               </div>
-
               <div className="col-span-2">
                 <label className="block text-sm font-semibold mb-1">Letra de Canción</label>
                 <textarea
@@ -709,22 +752,21 @@ export default function UpdateAlbumPage() {
                   onChange={(e) => setSongForm((s) => ({ ...s, lyrics: e.target.value }))}
                 />
               </div>
-
               <div className="col-span-2 grid grid-cols-2 gap-4">
-                {SONG_PLATFORMS.map((p) => {
+                {MANDATORY_PLATFORMS.map((p) => {
                   const idx = (songForm.links || []).findIndex((l) => l.name === p);
                   const value = idx >= 0 ? songForm.links[idx].url : "";
                   return (
                     <div key={p}>
-                      <div className="text-black font-semibold text-sm mb-1">{`URL ${p}`}</div>
+                      <div className="text-black font-semibold text-sm mb-1">{`URL ${p}`}<span className="text-red-500 ml-1">*</span></div>
                       <div className="grid grid-cols-[44px_1fr] gap-2 items-center">
                         <div className="flex justify-center items-center w-11 h-11 rounded-md border bg-white">
                           {PLATFORM_ICONS[p]}
                         </div>
                         <input
                           type="url"
-                          placeholder="URL"
-                          className="border rounded px-3 py-2 w-full text-sm !text-black placeholder:text-gray-500"
+                          placeholder="https://"
+                          className="border rounded px-3 py-2 w-full text-sm !text-black placeholder:text-gray-400"
                           value={value}
                           onChange={(e) => {
                             const url = e.target.value;
@@ -736,14 +778,64 @@ export default function UpdateAlbumPage() {
                               return { ...s, links };
                             });
                           }}
+                          required
                         />
                       </div>
                     </div>
                   );
                 })}
+                {(songForm.links || []).filter(l=> !MANDATORY_PLATFORMS.some(m=> m.toLowerCase()===l.name.toLowerCase())).map((l) => {
+                  const idx = songForm.links.findIndex(x=> x.name === l.name);
+                  return (
+                    <div key={l.name} className="col-span-2 flex items-center gap-2">
+                      <span className="text-xs font-semibold text-black min-w-[90px] truncate">{l.name}</span>
+                      <input
+                        type="url"
+                        className="border rounded px-3 py-2 text-sm !text-black flex-1"
+                        placeholder="https://"
+                        value={l.url}
+                        onChange={(e)=> setSongForm(s=> ({...s, links: s.links.map((ln,i)=> i===idx ? { ...ln, url: e.target.value } : ln)}))}
+                      />
+                      <button type="button" className="text-red-600 text-xs" onClick={()=> setSongForm(s=> ({...s, links: s.links.filter((_,i)=> i!==idx)}))}>🗑️</button>
+                    </div>
+                  );
+                })}
+                <div className="col-span-2 flex flex-col gap-2 mt-2">
+                  <div className="flex flex-col md:flex-row gap-2">
+                    <input
+                      type="text"
+                      className="border rounded px-3 py-2 text-sm !text-black flex-1"
+                      placeholder="Nombre plataforma"
+                      value={newSongPlatformName}
+                      onChange={(e)=> setNewSongPlatformName(e.target.value)}
+                    />
+                    <input
+                      type="url"
+                      className="border rounded px-3 py-2 text-sm !text-black flex-1"
+                      placeholder="https://url"
+                      value={newSongPlatformUrl}
+                      onChange={(e)=> setNewSongPlatformUrl(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="border border-purple-400 text-purple-500 rounded px-4 py-2 text-xs font-medium hover:bg-purple-50 disabled:opacity-50"
+                      disabled={!newSongPlatformName.trim() || !newSongPlatformUrl.trim() || songForm.links.some(l=> l.name.toLowerCase()===newSongPlatformName.trim().toLowerCase()) || MANDATORY_PLATFORMS.some(m=> m.toLowerCase()===newSongPlatformName.trim().toLowerCase())}
+                      onClick={() => {
+                        const name = newSongPlatformName.trim();
+                        const url = newSongPlatformUrl.trim();
+                        if (!name || !url) return;
+                        setSongForm(s=> ({...s, links: [...s.links, { name, url }]}));
+                        setNewSongPlatformName('');
+                        setNewSongPlatformUrl('');
+                      }}
+                    >
+                      Añadir plataforma
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-gray-500">Las cuatro primeras plataformas son obligatorias.</p>
+                </div>
               </div>
             </div>
-
             <div className="flex justify-end gap-3 mt-4">
               <button type="button" className="px-4 py-2 text-sm border rounded" onClick={() => setSongEditorOpen(false)}>
                 Cancelar

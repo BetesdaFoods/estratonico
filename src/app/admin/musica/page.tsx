@@ -22,10 +22,11 @@ type DashboardAlbum = {
   id: string;
   name: string;
   concept: string;
+  conceptRich?: any;
   coverImage?: string;
   createdAt: string;
   status: Status;
-  genre: { name: string };
+  genreNames: string[];
 };
 
 function formatDate(iso: string) {
@@ -40,27 +41,75 @@ export default async function Page() {
   const albums = await fetchAlbums();
 
   const initialAlbums: DashboardAlbum[] = (albums || []).map((album: any) => {
-    const genreName = Array.isArray(album.genres)
-      ? album.genres.map((g: any) => g?.name).filter(Boolean).join(", ")
-      : (album.genre ?? "");
-
-    const createdAtStr =
-      typeof album.createdAt === "string"
-        ? album.createdAt
-        : new Date(album.createdAt).toISOString();
-
-    const status: Status = album.status === "PUBLISHED" ? "PUBLISHED" : "DRAFT";
-
+    const genreNames: string[] = Array.isArray(album.genreNames)
+      ? album.genreNames.filter((g: any) => typeof g === 'string' && g.trim())
+      : Array.isArray(album.genres)
+        ? album.genres.map((g: any) => g?.name).filter((n: any) => typeof n === 'string' && n.trim())
+        : [];
+    const createdAtStr = typeof album.createdAt === 'string' ? album.createdAt : new Date(album.createdAt).toISOString();
+    const status: Status = album.status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
     return {
       id: album.id,
       name: album.name,
       concept: album.concept,
+      conceptRich: album.conceptRich,
       coverImage: album.coverImage ?? undefined,
       createdAt: createdAtStr,
       status,
-      genre: { name: genreName },
-    };
+      genreNames,
+    } as DashboardAlbum;
   });
+
+  function renderConcept(a: any) {
+    if (a.conceptRich) {
+      try {
+        // TipTap JSON -> HTML simple (bold, italic, bullet/ordered list, paragraph)
+        const json = typeof a.conceptRich === 'string' ? JSON.parse(a.conceptRich) : a.conceptRich;
+        if (!json || !json.content) return a.concept || '';
+        const html = json.content.map((node: any) => {
+          if (node.type === 'paragraph') {
+            const inner = (node.content || []).map((c: any) => nodeToHtml(c)).join('');
+            if (!inner.trim()) return '';
+            return `<p>${inner}</p>`;
+          }
+          if (node.type === 'bulletList') {
+            const items = (node.content||[]).map((li: any)=> `<li>${(li.content||[]).map((liC:any)=>liC.type==='paragraph'?(liC.content||[]).map((x:any)=>nodeToHtml(x)).join(''): '').join('')}</li>`).join('');
+            return `<ul>${items}</ul>`;
+          }
+          if (node.type === 'orderedList') {
+            const items = (node.content||[]).map((li: any)=> `<li>${(li.content||[]).map((liC:any)=>liC.type==='paragraph'?(liC.content||[]).map((x:any)=>nodeToHtml(x)).join(''): '').join('')}</li>`).join('');
+            return `<ol>${items}</ol>`;
+          }
+          return '';
+        }).join('').trim();
+        return html || a.concept || '';
+      } catch { return a.concept || ''; }
+    }
+    return a.concept || '';
+  }
+
+  function nodeToHtml(node: any): string {
+    if (!node) return '';
+    if (node.type === 'text') {
+      let text = escapeHtml(node.text || '');
+      if (node.marks) {
+        node.marks.forEach((m: any) => {
+          if (m.type === 'bold') text = `<strong>${text}</strong>`;
+          if (m.type === 'italic') text = `<em>${text}</em>`;
+        });
+      }
+      return text;
+    }
+    return '';
+  }
+  function escapeHtml(str: string) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   return (
     <section className="min-h-[1300px] h-screen flex flex-col pt-36 pb-6 px-6 md:px-16 bg-grayBackground">
@@ -105,11 +154,9 @@ export default async function Page() {
                     <div className="flex items-center gap-3">
                       <h3 className="font-semibold text-lg md:text-xl truncate">{a.name}</h3>
                     </div>
-                    <div className="mt-1 text-sm text-gray-500 truncate">{a.genre.name || "—"}</div>
+                    <div className="mt-1 text-sm text-gray-500 truncate">{(a.genreNames && a.genreNames.length > 0) ? a.genreNames.join(', ') : '—'}</div>
                     {a.concept && (
-                      <p className="mt-2 text-xs md:text-sm text-gray-600 line-clamp-2">
-                        {a.concept}
-                      </p>
+                      <div className="mt-2 text-xs md:text-sm text-gray-600 line-clamp-2 leading-relaxed" dangerouslySetInnerHTML={{__html: renderConcept(a)}} />
                     )}
                   </div>
 

@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       if (fd) body = Object.fromEntries(fd.entries());
     }
 
-    const { albumId, name, duration, lyrics } = body;
+    const { albumId, name, duration, lyrics, lyricsRich } = body;
     // Del front puede venir como "links" o "platforms"
     let platforms = body.platforms ?? body.links;
 
@@ -61,12 +61,22 @@ export async function POST(req: Request) {
       }
     }
 
+    let lyricsRichData: any = undefined;
+    if (lyricsRich) {
+      try {
+        lyricsRichData = typeof lyricsRich === "string" ? JSON.parse(lyricsRich) : lyricsRich;
+      } catch {
+        lyricsRichData = undefined;
+      }
+    }
+
     const song = await db.song.create({
       data: {
         albumId: String(albumId),
         name: String(name),
         duration: toSeconds(duration),
         lyrics: lyrics ? String(lyrics) : null,
+        lyricsRich: lyricsRichData,
         platforms: {
           create: parsedPlatforms
             .filter((p: any) => p?.name && p?.url)

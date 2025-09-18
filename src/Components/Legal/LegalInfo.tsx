@@ -14,7 +14,7 @@ function LegalInfo({ info: {title, description, date} }: LegalInfoProps) {
 			</h1>
 			<div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl space-y-6 sm:space-y-9">
 				<h2 className="font-bold">
-					Última vez actualizado el {date.toLocaleDateString("es-VE")}
+					Última vez actualizado el 17/09/2025
 				</h2>
 				{description.split(/\n+/).map((paragraph, index) => (
 					<p

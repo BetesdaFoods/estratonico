@@ -82,7 +82,7 @@ const navigation = {
 		],
 		Legal: [
 			{
-				name: "Términos de uso",
+				name: "Términos y\nCondiciones",
 				href: "/legal/terminos-de-uso",
 				logo: "",
 			},
@@ -91,7 +91,8 @@ const navigation = {
 				href: "/legal/politica-de-privacidad",
 				logo: "",
 			},
-			{ name: "Cookies", href: "/legal/preguntas-frecuentes", logo: "" },
+			{ name: "Preguntas\nFrecuentes", href: "/legal/preguntas-frecuentes", logo: "" },
+			{ name: "Cookies", href: "/legal/cookies", logo: "" },
 		],
 	},
 };

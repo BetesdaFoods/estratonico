@@ -21,13 +21,22 @@ export async function POST(req: Request) {
     }
 
     const created = await db.$transaction(
-      songs.map((s: any) =>
-        db.song.create({
+      songs.map((s: any) => {
+        let lyricsRichData: any = undefined;
+        if (s.lyricsRich) {
+          try {
+            lyricsRichData = typeof s.lyricsRich === "string" ? JSON.parse(s.lyricsRich) : s.lyricsRich;
+          } catch {
+            lyricsRichData = undefined;
+          }
+        }
+        return db.song.create({
           data: {
             albumId: String(albumId),
             name: String(s.name),
             duration: toSeconds(s.duration),
             lyrics: s.lyrics ? String(s.lyrics) : null,
+            lyricsRich: lyricsRichData,
             platforms: {
               create: Array.isArray(s.links ?? s.platforms)
                 ? (s.links ?? s.platforms)
@@ -37,8 +46,8 @@ export async function POST(req: Request) {
             },
           },
           include: { platforms: true },
-        })
-      )
+        });
+      })
     );
 
     return NextResponse.json(created, { status: 201 });

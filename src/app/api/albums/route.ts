@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 
 export async function GET() {
   try {
     const albums = await db.album.findMany({
-      include: { genres: true, platforms: true },
+      // Ya no incluimos genres (relación eliminada). Solo plataformas.
+      include: { platforms: true },
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json(albums);
@@ -17,7 +18,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const contentType = req.headers.get("content-type") || "";
     let body: any = {};
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
       if (fd) body = Object.fromEntries(fd.entries());
     }
 
-    let { name, concept, coverImage, createdAt, genreIds, status, platforms, project, publishedAt } = body;
+    let { name, concept, conceptRich, coverImage, createdAt, genreNames, status, platforms, project, publishedAt } = body;
 
     // Normalizar project (Universe)
     let projectValue: "NOVA" | "NEXUS" | undefined;
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
       else if (p === "NOVA") projectValue = "NOVA";
     }
 
-    if (!name || !concept) {
+    if (!name || (!concept && !conceptRich)) {
       return NextResponse.json({ message: "Faltan campos obligatorios" }, { status: 400 });
     }
 
@@ -53,28 +54,50 @@ export async function POST(req: NextRequest) {
       createdAt = new Date();
     }
 
-    // Normalizar genreIds
-    if (typeof genreIds === "string") {
-      try {
-        const parsed = JSON.parse(genreIds);
-        genreIds = Array.isArray(parsed) ? parsed : String(genreIds).split(",").map((s) => s.trim());
-      } catch {
-        genreIds = String(genreIds).split(",").map((s) => s.trim());
+    // Normalizar genreNames (array de strings)
+    if (genreNames !== undefined) {
+      if (typeof genreNames === "string") {
+        try {
+          const parsed = JSON.parse(genreNames);
+          genreNames = Array.isArray(parsed)
+            ? parsed
+            : String(genreNames).split(",").map((s) => s.trim());
+        } catch {
+          genreNames = String(genreNames).split(",").map((s) => s.trim());
+        }
       }
     }
+    if (!Array.isArray(genreNames)) genreNames = [];
+    genreNames = Array.from(
+      new Set(
+        genreNames
+          .map((g: any) => (typeof g === "string" ? g.trim() : ""))
+          .filter((g: string) => g.length > 0)
+      )
+    );
 
-    if (!Array.isArray(genreIds) || genreIds.length === 0) {
-      return NextResponse.json({ message: "Selecciona al menos un género" }, { status: 400 });
+    if (genreNames.length === 0) {
+      return NextResponse.json({ message: "Debes indicar al menos un género" }, { status: 400 });
+    }
+
+    let conceptRichData: any = undefined;
+    if (conceptRich) {
+      try {
+        conceptRichData = typeof conceptRich === "string" ? JSON.parse(conceptRich) : conceptRich;
+      } catch {
+        conceptRichData = undefined;
+      }
     }
 
     const album = await db.album.create({
       data: {
         name,
-        concept,
+        concept: concept || "",
+        conceptRich: conceptRichData,
         coverImage: coverImage ?? null,
         createdAt,
         status: status === "PUBLISHED" ? "PUBLISHED" : "DRAFT",
-        genres: { connect: genreIds.map((id: string) => ({ id })) },
+        genreNames, // nuevo campo
         platforms: {
           create: Array.isArray(platforms)
             ? platforms
@@ -85,7 +108,7 @@ export async function POST(req: NextRequest) {
         project: projectValue,
         publishedAt: publishedAt ? new Date(publishedAt) : null,
       },
-      include: { genres: true, platforms: true },
+      include: { platforms: true },
     });
 
     return NextResponse.json(album, { status: 201 });

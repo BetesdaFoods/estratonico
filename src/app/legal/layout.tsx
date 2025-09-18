@@ -8,6 +8,7 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
 			href: "/legal/politica-de-privacidad",
 		},
 		{ name: "Preguntas Frecuentes", href: "/legal/preguntas-frecuentes" },
+		{ name: "Política de Cookies", href: "/legal/cookies" },
 	];
 
 	return (

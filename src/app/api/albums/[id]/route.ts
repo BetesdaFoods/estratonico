@@ -6,7 +6,7 @@ export async function GET(_req: Request, ctx: any) {
   try {
     const album = await db.album.findUnique({
       where: { id: params.id },
-      include: { genres: true, platforms: true },
+      include: { platforms: true },
     });
     if (!album) {
       return NextResponse.json({ message: "Álbum no encontrado" }, { status: 404 });
@@ -34,20 +34,21 @@ export async function PATCH(req: Request, ctx: any) {
     let {
       name,
       concept,
+      conceptRich,
       coverImage,
       createdAt,
-      genreIds, // puede venir string JSON o "id1,id2"
+      genreNames,
       status,
-      platforms, // array o string JSON
+      platforms,
+      project,
+      publishedAt,
     } = body;
 
-    // Validar existencia
     const found = await db.album.findUnique({ where: { id: params.id } });
     if (!found) {
       return NextResponse.json({ message: "Álbum no encontrado" }, { status: 404 });
     }
 
-    // Normalizar createdAt
     let createdAtValue: Date | undefined = undefined;
     if (createdAt !== undefined) {
       const d = new Date(createdAt);
@@ -57,45 +58,39 @@ export async function PATCH(req: Request, ctx: any) {
       createdAtValue = d;
     }
 
-    // Normalizar genreIds (si viene, reemplaza)
-    let genresSet:
-      | { set: { id: string }[] }
-      | undefined = undefined;
-    if (genreIds !== undefined) {
-      if (typeof genreIds === "string") {
+    // genreNames
+    if (genreNames !== undefined) {
+      if (typeof genreNames === "string") {
         try {
-          const parsed = JSON.parse(genreIds);
-          genreIds = Array.isArray(parsed)
+          const parsed = JSON.parse(genreNames);
+          genreNames = Array.isArray(parsed)
             ? parsed
-            : String(genreIds)
+            : String(genreNames)
                 .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean);
+                .map((s: string) => s.trim())
+                .filter((s: string) => s.length > 0);
         } catch {
-          genreIds = String(genreIds)
+          genreNames = String(genreNames)
             .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean);
+            .map((s: string) => s.trim())
+            .filter((s: string) => s.length > 0);
         }
       }
-      if (Array.isArray(genreIds)) {
-        genresSet = { set: genreIds.map((id: string) => ({ id })) };
-      }
+      if (!Array.isArray(genreNames)) genreNames = [];
+      genreNames = Array.from(new Set(genreNames.map((g: any) => (typeof g === "string" ? g.trim() : "")).filter((g: string) => g)));
     }
 
-    // Normalizar platforms (si viene, reemplaza todas)
+    // platforms
     let platformsOps:
       | {
           deleteMany: Record<string, never>;
           create: { name: string; url: string }[];
         }
       | undefined = undefined;
-
     if (platforms !== undefined) {
       let parsed: any[] = [];
-      if (Array.isArray(platforms)) {
-        parsed = platforms;
-      } else if (typeof platforms === "string" && platforms.trim()) {
+      if (Array.isArray(platforms)) parsed = platforms;
+      else if (typeof platforms === "string" && platforms.trim()) {
         try {
           const j = JSON.parse(platforms);
           if (Array.isArray(j)) parsed = j;
@@ -109,23 +104,39 @@ export async function PATCH(req: Request, ctx: any) {
       platformsOps = { deleteMany: {}, create };
     }
 
+    // conceptRich
+    let conceptRichData: any = undefined;
+    if (conceptRich !== undefined) {
+      try {
+        conceptRichData = typeof conceptRich === 'string' ? JSON.parse(conceptRich) : conceptRich;
+      } catch {
+        conceptRichData = undefined;
+      }
+    }
+
+    // project
+    let projectValue: "NOVA" | "NEXUS" | undefined = undefined;
+    if (project !== undefined && typeof project === "string") {
+      const p = project.trim().toUpperCase();
+      if (p === 'NEXUS') projectValue = 'NEXUS';
+      else if (p === 'NOVA') projectValue = 'NOVA';
+    }
+
     const updated = await db.album.update({
       where: { id: params.id },
       data: {
         name: name !== undefined ? String(name) : undefined,
         concept: concept !== undefined ? String(concept) : undefined,
+        conceptRich: conceptRich !== undefined ? conceptRichData : undefined,
         coverImage: coverImage !== undefined ? (coverImage ? String(coverImage) : null) : undefined,
         createdAt: createdAtValue,
-        status:
-          status !== undefined
-            ? status === "PUBLISHED"
-              ? "PUBLISHED"
-              : "DRAFT"
-            : undefined,
-        genres: genresSet,
+        status: status !== undefined ? (status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT') : undefined,
+        genreNames: genreNames !== undefined ? genreNames : undefined,
         platforms: platformsOps,
+        project: projectValue,
+        publishedAt: publishedAt !== undefined ? (publishedAt ? new Date(publishedAt) : null) : undefined,
       },
-      include: { genres: true, platforms: true },
+      include: { platforms: true },
     });
 
     return NextResponse.json(updated);

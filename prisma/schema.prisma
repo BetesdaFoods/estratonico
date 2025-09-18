@@ -35,7 +35,6 @@ model newsletterSubscribers {
 model Genre {
   id    String  @id @default(uuid())
   name  String  @unique
-  albums Album[]
 }
 
 model Platform {
@@ -52,12 +51,13 @@ model Album {
   id          String     @id @default(uuid())
   name        String
   concept     String
+  conceptRich Json?      // Rich text (TipTap JSON)
   coverImage  String?
   createdAt   DateTime   @default(now()) @db.Timestamp(6)
   status      AlbumStatus @default(DRAFT)
   platforms   Platform[]
   songs       Song[]
-  genres      Genre[]
+  genreNames  String[]   @default([]) // NUEVO: nombres de géneros libres
   project     Universe @default(NOVA)
   publishedAt DateTime?   @db.Timestamp(6)
 }
@@ -77,6 +77,7 @@ model Song {
   name      String
   duration  Int
   lyrics    String?
+  lyricsRich Json?     // Rich text (TipTap JSON)
   album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade) // <—
   albumId   String
   platforms Platform[]
