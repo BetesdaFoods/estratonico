@@ -204,7 +204,9 @@ export async function updateGenre(id: string, name: string): Promise<Genre> {
 
 export async function deleteGenre(id: string): Promise<{ ok: true }> {
   try {
-    const albumsUsing = await db.album.count({ where: { genres: { some: { id } } } });
+    const albumsUsing = await db.album.count({
+      where: ({ genres: { some: { id } } } as unknown) as Prisma.AlbumWhereInput,
+    });
     if (albumsUsing > 0) {
       throw new Error("No se puede borrar: género asociado a uno o más álbumes");
     }

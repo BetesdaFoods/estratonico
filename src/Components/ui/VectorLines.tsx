@@ -7,7 +7,7 @@ function VectorLines({ flip = false }: { flip?: boolean }) {
 			fill="none"
 			strokeWidth={2}
 			xmlns="http://www.w3.org/2000/svg"
-			className="w-[300px] sm:w-[512px]"
+			className="w-[290px] md:w-[400px] lg:w-[312px] xl:w-[512px]"
 		>
 			<g transform={flip ? "rotate(180, 256, 15)" : ""}>
 				<path d="M1 10L21 30H491.5L511.5 10" stroke="white" />

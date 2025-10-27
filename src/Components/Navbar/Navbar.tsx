@@ -7,15 +7,19 @@ import Image from "next/image";
 import Estratonico from "@/Components/Navbar/Estratonico";
 import { LogoDisplayerSVG } from "@/Components/SVGLogo/LogoDisplayerSV";
 import NavigationPanel from "./NavigationPanel";
+import UpdateLanguagePanel from "./UpdateLanguagePanel";
 import NavLinkDecorator from "./NavLinkDecorator";
 
 interface NavbarProps {
 	navigation: Record<string, { name: string; href: string }>;
 	socials: Array<{ name: string; href: string; logo: string }>;
 	musicPlatforms: Array<{ name: string; href: string; logo: string }>;
+	idioma: Array<{ name: string; href: string; logo: string }>;
+	setIdioma: (newIdioma: string) => void;
+	idiomaSelected: string;
 }
 
-const Navbar = ({ navigation, socials, musicPlatforms }: NavbarProps) => {
+const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idiomaSelected }: NavbarProps) => {
 	return (
 		<Popover as="nav" className="fixed top-0 left-0 w-full  z-10">
 			{({ open }) => (
@@ -119,6 +123,26 @@ const Navbar = ({ navigation, socials, musicPlatforms }: NavbarProps) => {
 												</PopoverButton>
 												<NavigationPanel
 													links={musicPlatforms}
+												/>
+											</>
+										)}
+									</Popover>
+									{/* LANGUAGE SELECTION */}
+									<Popover className="flex items-center">
+										{() => (
+											<>
+												<PopoverButton className="focus:outline-none">
+													<LogoDisplayerSVG
+														isLanguage={true}
+														isOpen={true}
+														idiomaSelected={idiomaSelected}
+														isInstagram={false}
+													/>
+												</PopoverButton>
+												<UpdateLanguagePanel
+													links={idioma}
+													setIdioma={setIdioma}
+													idiomaSelected={idiomaSelected}
 												/>
 											</>
 										)}
