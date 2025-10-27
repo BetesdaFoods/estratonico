@@ -1,12 +1,15 @@
+import React from "react";
 // import type { Metadata } from "next";
 import { Orbitron } from "next/font/google";
 import { Roboto } from "next/font/google";
-import Navbar from "@/Components/Navbar/Navbar";
+import HeaderClient from "@/Components/HeaderClient";
 import Footer from "@/Components/Footer/Footer";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import { LanguageProvider } from '@/Components/Context/LanguageContext';
 
 import "./globals.scss";
+import { title } from "process";
 
 const robotoFont = Roboto({
 	subsets: ["latin"],
@@ -33,66 +36,102 @@ const navigation = {
 	footer: {
 		"Social Media": [
 			{
+				titleEN: "Social Media",
 				name: "Instagram",
+				nameEN: "Instagram",
 				href: "https://www.instagram.com/imestratonico",
 				logo: "/assets/footer-insta.svg",
 			},
 			{
+				titleEN: "Social Media",
 				name: "Facebook",
+				nameEN: "Facebook",
 				href: "https://www.facebook.com/imestratonico",
 				logo: "/assets/footer-facebook.svg",
 			},
 			{
+				titleEN: "Social Media",
 				name: "TikTok",
+				nameEN: "TikTok",
 				href: "https://www.tiktok.com/@estratonico",
 				logo: "/assets/tiktok-footer.svg",
 			},
 			{
+				titleEN: "Social Media",
 				name: "YouTube",
+				nameEN: "YouTube",
 				href: "https://www.youtube.com/@estratonico?sub_confirmation=1",
 				logo: "/assets/youtube-footer.svg",
 			},
 			{
+				titleEN: "Social Media",
 				name: "X",
+				nameEN: "X",
 				href: "https://x.com/ImEstratonico",
 				logo: "/assets/x-footer.svg",
 			},
 		],
 		Plataformas: [
 			{
+				titleEN: "Platforms",
 				name: "Spotify",
+				nameEN: "Spotify",
 				href: "https://www.spotify.com/artist/2BrhlQ1HbzeOyKUIWZMA3i",
 				logo: "/assets/spotify-footer.svg",
 			},
 			{
+				titleEN: "Platforms",
 				name: "Amazon Music",
+				nameEN: "Amazon Music",
 				href: "https://music.amazon.com", // FALTA
 				logo: "/assets/amazon-footer.svg",
 			},
 			{
+				titleEN: "Platforms",
 				name: "Apple Music",
+				nameEN: "Apple Music",
 				href: "https://music.apple.com", // FALTA
 				logo: "/assets/apple-footer.svg",
 			},
 			{
+				titleEN: "Platforms",
 				name: "YouTube Music",
+				nameEN: "YouTube Music",
 				href: "https://music.youtube.com", // FALTA
 				logo: "/assets/youtube-music.svg",
 			},
 		],
+		Idioma: [
+			{ name: "Español", href: "es", logo: "/assets/Flag_of_Spain.svg" },
+			{ name: "English", href: "en", logo: "/assets/Flag_of_the_United_States.svg" },
+		],
 		Legal: [
 			{
-				name: "Términos y\nCondiciones",
+				titleEN: "Legal",
+				name: "Términos y Condiciones",
+				nameEN: "Terms and Conditions",
 				href: "/legal/terminos-de-uso",
 				logo: "",
 			},
 			{
-				name: "Política de\nprivacidad",
+				titleEN: "Legal",
+				name: "Política de privacidad",
+				nameEN: "Privacy Policy",
 				href: "/legal/politica-de-privacidad",
 				logo: "",
 			},
-			{ name: "Preguntas\nFrecuentes", href: "/legal/preguntas-frecuentes", logo: "" },
-			{ name: "Cookies", href: "/legal/cookies", logo: "" },
+			{
+				titleEN: "Legal",
+				name: "Preguntas Frecuentes",
+				nameEN: "FAQs",
+				href: "/legal/preguntas-frecuentes",
+				logo: "" },
+			{ 
+				titleEN: "Legal",
+				name: "Cookies", 
+				nameEN: "Cookies",
+				href: "/legal/cookies", 
+				logo: "" },
 		],
 	},
 };
@@ -163,15 +202,22 @@ export default function RootLayout({
 				/>
 			</head>
 			<body className="bg-black font-roboto text-white">
-				<div>
-					<Navbar
+				<LanguageProvider>
+					<HeaderClient
 						navigation={navigation.navbar}
 						socials={navigation.footer["Social Media"]}
 						musicPlatforms={navigation.footer.Plataformas}
+						idioma={navigation.footer.Idioma}
 					/>
 					<div className="overflow-hidden">{children}</div>
-					<Footer navigation={navigation.footer} />
-				</div>
+					<div className="relative">
+						<div
+							aria-hidden="true"
+							className="pointer-events-none absolute -top-12 left-0 w-full h-12 bg-gradient-to-t from-[#2fa3ad]/30 to-transparent z-10"
+						/>
+						<Footer navigation={navigation.footer} />
+					</div>
+				</LanguageProvider>
 				<SpeedInsights />
 				<Analytics />
 			</body>

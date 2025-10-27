@@ -3,18 +3,37 @@ import Image from "next/image";
 import { Article } from "@/lib/definitions";
 import { fetchArticles } from "@/lib/data";
 import Link from "next/link";
+import ReadArticleButton from "./ReadArticleButton";
+import DateFormatter, { NoticiasTitle, SeeMoreButton } from "./CommonComponents";
 
 async function NewsSection() {
-	const articles: Article[] = await fetchArticles();
+  	const articles: Article[] = await fetchArticles();
 	const latest = articles[0];
-	return (
-		<section className="bg-grayBackground text-white lg:flex items-stretch px-8 py-10 sm:px-16 md:px-20 2xl:px-36 2xl:py-36">
-			{/* LATEST ARTICLE */}
-			<Link
-				href={`/noticias/${latest.id}`}
-				className="relative hidden lg:flex justify-center lg:w-6/12 h-auto transform transition-transform duration-300 group hover:scale-105 hover:cursor-pointer select-none"
-			>
-				<div className="relative w-full aspect-[742/695]">
+
+  	return (
+	    <section className="bg-blackBackground text-white items-stretch px-8 py-0 lg:px-20 pb-16 lg:pb-12 xl:px-36 xl:pb-20 pt-8 lg:pt-20 xl:pt-32">
+    		{/* LATEST ARTICLE */}
+    		<Link
+        		href={`/noticias/${latest.id}`}
+        		className="relative lg:flex flex-col lg:w-full h-auto transition-transform duration-300 group hover:cursor-pointer select-none"
+      		>
+				<div className="flex justify-between">
+					<span className="w-full lg:max-w-[65%] xl:max-w-[70%] flex flex-col">
+						<h1 className="text-1xl lg:text-2xl xl:text-3xl py-2 xl:py-2 text-[#3BF3FF]">
+							<DateFormatter dateString={latest.updatedAt} />
+						</h1>
+						<h3 className="uppercase font-bold leading-tight text-2xl lg:text-[40px] xl:text-6xl group-hover:underline text-shadow-md">
+							{latest.title}
+						</h3>
+						<h1 className="text-[17px] lg:text-2xl xl:text-3xl py-1 lg:py-4 xl:py-6">
+							{latest.summary}
+						</h1>
+					</span>
+					<span className="relative hidden sm:block items-center px-10 py-14">
+						<ReadArticleButton link={`/noticias/${latest.id}`} />
+					</span>
+				</div>
+				<div className="relative w-full max-h-[200px] lg:max-h-[500px] xl:max-h-[800px] aspect-[742/695]">
 					<Image
 						src={latest.coverImage}
 						alt="Estratonico"
@@ -22,47 +41,58 @@ async function NewsSection() {
 						className="rounded-3xl object-cover"
 					/>
 				</div>
-
-				<h3 className="absolute left-6 uppercase bottom-11 font-bold leading-tight text-5xl xl:text-6xl 2xl:text-[4.35rem] px-10 2xl:px-5 group-hover:underline text-shadow-md">
-					{latest.title}
-				</h3>
 			</Link>
 
 			{/* NEWS TIMELINE */}
-			<div className="sm:px-4 md:px-8 lg:ml-6 lg:w-6/12 h-auto flex flex-col">
+			<div className="w-full pt-4 lg:pt-8 xl:pt-14 h-auto flex flex-col">
 				{/* LINK - SEE MORE */}
-				<div className="flex flex-col mb-6 sm:px-3 lg:pl-0 lg:pr-8 xl:pr-10 xl:pb-3 2xl:pb-6">
-					<h3 className="text-3xl sm:text-4xl font-bold text-nowrap 2xl:text-6xl">
-						ÚLTIMAS NOTICIAS
-					</h3>
-					<Link
-						href="/noticias/ultimas-noticias"
-						className="flex items-center text-[#3BF3FF] font-bold xl:font-black text-nowrap xl:text-lg 2xl:text-2xl hover:underline hover:cursor-pointer select-none transform transition-transform duration-300 hover:xl:scale-105 origin-[0%_50%]"
-					>
-						VER MÁS
-						<Image
-							className="ml-2"
-							src="/assets/news-right-arrow.svg"
-							alt="arrow"
-							width={15}
-							height={13}
-						/>
-					</Link>
+				<div className="flex justify-between mb-6 sm:px-3 lg:pl-0 xl:pb-3 2xl:pb-6">
+					<NoticiasTitle />
+					<SeeMoreButton link="/noticias/ultimas-noticias" />
 				</div>
 				{/* ARTICLES */}
-				<div className="flex flex-col gap-9 2xl:gap-12 lg:hidden flex-1 justify-evenly">
-					{articles.slice(0, 3).map((article) => (
-						<NewsCard key={article.id} article={article} />
-					))}
+				<div className="lg:hidden xl:hidden flex flex-col gap-9 2xl:gap-12">
+					{Array.from({ length: Math.ceil(Math.min(6, articles.length) / 2) }).map((_, idx) => {
+						const start = idx * 2;
+						const pair = articles.slice(start, start + 2);
+						return (
+							<div key={idx} className="flex  sm:flex-row gap-5 2xl:gap-12 flex-1 justify-evenly">
+								{pair.map((article) => (
+									<NewsCard key={article.id} article={article} />
+								))}
+							</div>
+						);
+					})}
 				</div>
-				<div className="lg:flex flex-col gap-9 2xl:gap-12 hidden flex-1 justify-evenly">
-					{articles.slice(1, 3).map((article) => (
-						<NewsCard key={article.id} article={article} />
-					))}
+				<div className="lg:flex xl:hidden flex-col gap-9 2xl:gap-12 hidden flex-1 justify-evenly">
+						{Array.from({ length: Math.min(2, Math.ceil(Math.min(6, articles.length) / 3)) }).map((_, idx) => {
+						const start = idx * 3;
+						const trio = articles.slice(start, start + 3);
+						return (
+							<div key={idx} className="flex lg:flex-row gap-5 2xl:gap-12 flex-1 justify-evenly">
+								{trio.map((article) => (
+									<NewsCard key={article.id} article={article} />
+								))}
+							</div>
+						);
+					})}
+				</div>
+				<div className="xl:flex flex-col gap-9 2xl:gap-12 hidden flex-1 justify-evenly">
+					{Array.from({ length: Math.ceil(Math.min(6, articles.length) / 4) }).map((_, idx) => {
+						const start = idx * 4;
+						const cuarteto = articles.slice(start, start + 4);
+						return (
+							<div key={idx} className="flex xl:flex-row gap-5 2xl:gap-12 flex-1 justify-evenly">
+								{cuarteto.map((article) => (
+									<NewsCard key={article.id} article={article} />
+								))}
+							</div>
+						);
+					})}
 				</div>
 			</div>
-		</section>
-	);
+    	</section>
+  	);
 }
 
 export default NewsSection;

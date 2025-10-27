@@ -3,8 +3,10 @@ import { LogoDisplayerSVGProps } from "@/Components/typescriptInterfaces/Interfa
 export const LogoDisplayerSVG = ({
 	isInstagram = true,
 	isOpen = false,
+	isLanguage = false,
+	idiomaSelected = "es",
 }: LogoDisplayerSVGProps) => {
-	if (!isInstagram) {
+	if (!isInstagram && !isLanguage) {
 		return (
 			<div
 				id="music-media-btn"
@@ -33,6 +35,84 @@ export const LogoDisplayerSVG = ({
 						fill="white"
 					/>
 				</svg>
+				<svg
+					width="10"
+					height="8"
+					viewBox="0 0 10 8"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					className={`w-2 h-2 sm:w-2 sm:h-2 lg:w-3 lg:h-3 ${
+						!isOpen ? "rotate-90" : ""
+					}`}
+				>
+					<path
+						d="M5.89593 7.26123C5.51103 7.92789 4.54878 7.9279 4.16388 7.26123L1.03585 1.84332C0.65095 1.17665 1.13207 0.343319 1.90187 0.343319L8.15794 0.34332C8.92774 0.34332 9.40886 1.17665 9.02396 1.84332L5.89593 7.26123Z"
+						fill="#D9D9D9"
+					/>
+				</svg>
+			</div>
+		);
+	}  else if (isLanguage) {
+		// Bandera de España
+		const banderaES = (
+			<svg
+				width="20"
+				height="20"
+				viewBox="0 0 48 47"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
+			>
+				<circle
+					cx="24.2764"
+					cy="23.5"
+					r="22.5"
+					stroke="#F0F0F0"
+					strokeWidth="2"
+				/>
+				{/* Bandera España - Franjas roja/amarilla/roja */}
+				<rect x="12" y="15" width="24" height="17" fill="#C60B1E"/>
+				<rect x="12" y="19" width="24" height="9" fill="#FFC400"/>
+			</svg>
+		);
+
+		// Bandera de Estados Unidos
+		const banderaUS = (
+			<svg
+				width="20"
+				height="20"
+				viewBox="0 0 48 47"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
+			>
+				<circle
+					cx="24.2764"
+					cy="23.5"
+					r="22.5"
+					stroke="#F0F0F0"
+					strokeWidth="2"
+				/>
+				{/* Bandera USA - Franjas */}
+				<rect x="12" y="15" width="24" height="17" fill="#B22234"/>
+				<rect x="12" y="15" width="24" height="1.4" fill="white"/>
+				<rect x="12" y="17.8" width="24" height="1.4" fill="white"/>
+				<rect x="12" y="20.6" width="24" height="1.4" fill="white"/>
+				<rect x="12" y="23.4" width="24" height="1.4" fill="white"/>
+				<rect x="12" y="26.2" width="24" height="1.4" fill="white"/>
+				<rect x="12" y="29" width="24" height="1.4" fill="white"/>
+				{/* Cuadrante azul con estrellas */}
+				<rect x="12" y="15" width="9.6" height="9.8" fill="#3C3B6E"/>
+			</svg>
+		);
+
+		return (
+			<div
+				id="language-btn"
+				aria-describedby="language-tooltip"
+				className="flex items-center gap-2"
+			>
+				{idiomaSelected === "es" ? banderaES : banderaUS}
 				<svg
 					width="10"
 					height="8"

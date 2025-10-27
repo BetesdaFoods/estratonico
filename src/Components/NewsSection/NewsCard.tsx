@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Article } from "@/lib/definitions";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
+import DateFormatter from "./CommonComponents";
 
 function NewsCard({
 	article,
@@ -138,9 +139,9 @@ function NewsCard({
 	return (
 		<Link
 			href={`/noticias/${article.id}`}
-			className={`${className} flex flex-col items-center lg:flex-row w-full transform transition-transform duration-300 group xl:hover:scale-105 hover:cursor-pointer select-none`}
+			className={`${className} flex flex-col items-center w-[48%] lg:w-[32%] xl:w-[23%] transform transition-transform duration-300 group xl:hover:scale-105 hover:cursor-pointer select-none`}
 		>
-			<div className="relative aspect-[16/9] w-full lg:w-6/12 overflow-hidden">
+			<div className="relative aspect-[16/9] w-full overflow-hidden">
 				<Image
 					src={article.coverImage}
 					alt="Noticia Estratonico"
@@ -149,10 +150,10 @@ function NewsCard({
 				/>
 			</div>
 
-			<div className="px-4 w-full lg:w-6/12 mt-4 lg:mt-0">
+			<div className="w-full mt-4 lg:mt-2">
 				{!summaryOff && (
 					<p className="text-[#3BF3FF] text-xs uppercase xl:text-sm 2xl:text-base">
-						{formatDate(article.updatedAt)}
+						<DateFormatter dateString={article.updatedAt} />
 					</p>
 				)}
 				<h4 className="text-2xl font-black w-full overflow-hidden whitespace-nowrap text-ellipsis md:text-2xl lg:text-xl xl:text-2xl 2xl:text-4xl pt-2 group-hover:underline">
