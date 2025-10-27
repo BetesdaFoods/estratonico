@@ -102,8 +102,20 @@ const navigation = {
 			},
 		],
 		Idioma: [
-			{ name: "Español", href: "es", logo: "/assets/Flag_of_Spain.svg" },
-			{ name: "English", href: "en", logo: "/assets/Flag_of_the_United_States.svg" },
+			{
+				titleEN: "Language",
+				name: "Español",
+				nameEN: "Spanish",
+				href: "es",
+				logo: "/assets/Flag_of_Spain.svg"
+			},
+			{
+				titleEN: "Language",
+				name: "English",
+				nameEN: "English",
+				href: "en",
+				logo: "/assets/Flag_of_the_United_States.svg"
+			},
 		],
 		Legal: [
 			{

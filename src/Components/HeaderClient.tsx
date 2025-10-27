@@ -7,11 +7,17 @@ import { useLanguage } from '@/Components/Context/LanguageContext';
 type NavMap = Record<string, { name: string; href: string }>;
 type LinkItem = { titleEN: string; name: string; nameEN: string; href: string; logo: string };
 
+interface LanguageItem {
+  name: string;
+  href: string;
+  logo: string;
+}
+
 interface HeaderClientProps {
   navigation: NavMap;
   socials: LinkItem[];
   musicPlatforms: LinkItem[];
-  idioma: LinkItem[];
+  idioma: LanguageItem[];
 }
 
 export default function HeaderClient({
