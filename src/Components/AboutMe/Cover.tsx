@@ -30,7 +30,7 @@ function Cover() {
 						sm:text-xl
 						md:text-2xl
 						lg:text-3xl
-						xl:text-[2rem]" // It's like text-3.5xl
+						xl:text-[2rem]"
 					>
 						<p>Mi música no busca respuestas, sino preguntas.</p>
 						<p>
