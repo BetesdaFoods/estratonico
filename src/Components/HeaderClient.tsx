@@ -22,13 +22,17 @@ export default function HeaderClient({
 }: HeaderClientProps) {
   const { idioma: idiomaSelected, setIdioma } = useLanguage();
 
+  const onSetIdioma = (newIdioma: string) => {
+    setIdioma(newIdioma as any);
+  };
+
   return (
     <Navbar
       navigation={navigation}
       socials={socials}
       musicPlatforms={musicPlatforms}
       idioma={idioma}
-      setIdioma={setIdioma}
+      setIdioma={onSetIdioma}
       idiomaSelected={idiomaSelected}
     />
   );
