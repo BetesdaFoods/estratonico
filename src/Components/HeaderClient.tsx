@@ -33,13 +33,15 @@ export default function HeaderClient({
   };
 
   return (
-    <Navbar
-      navigation={navigation}
-      socials={socials}
-      musicPlatforms={musicPlatforms}
-      idioma={idioma}
-      setIdioma={onSetIdioma}
-      idiomaSelected={idiomaSelected}
-    />
+    <>
+      <Navbar
+        navigation={navigation}
+        socials={socials}
+        musicPlatforms={musicPlatforms}
+        idioma={idioma}
+        setIdioma={onSetIdioma}
+        idiomaSelected={idiomaSelected}
+      />
+    </>
   );
 }

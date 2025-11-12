@@ -29,28 +29,42 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 						<div className="absolute top-0 left-0 w-full min-h-[104px] -z-10 overflow-hidden">
 							<div className="relative w-full h-full flex items-center justify-center">
 								<Image
-									className="h-6 object-cover absolute top-[77px] hidden md:block"
-									width={959}
+									className="h-6 object-cover absolute top-[60px] hidden xl:block"
+									width={740}
 									height={23}
 									src="/assets/estratonicos-navbar-border.png"
 									alt="navbar background"
 								/>
 								<Image
+									className="h-6 object-cover absolute top-[65px] hidden lg:block xl:hidden"
+									width={740}
+									height={23}
+									src="/assets/estratonicos-navbar-border.png"
+									alt="navbar background"
+								/>
+								{/* <Image
 									className="object-cover absolute top-[78px] md:hidden"
 									width={245}
 									height={23}
 									src="/assets/estratonicos-navbar-border-sm.png"
 									alt="navbar background"
-								/>
+								/> */}
 								<Image
-									className="w-full min-h-[104px] object-cover absolute top-0 left-0 hidden xl:block"
+									className="w-full min-h-[80px] absolute top-0 left-0 hidden xl:block"
 									width={1920}
 									height={104}
 									src="/assets/estratonicos-navbar.png"
 									alt="navbar background"
 								/>
 								<Image
-									className="w-full min-h-[104px] object-cover absolute top-0 left-0 xl:hidden"
+									className="w-full min-h-[50px] object-cover absolute top-0 left-0 xl:hidden"
+									width={1920}
+									height={104}
+									src="/assets/estratonicos-navbar-md.png"
+									alt="navbar background"
+								/>
+								<Image
+									className="w-full min-h-[104px] object-cover absolute top-0 left-0 lg:hidden"
 									width={1920}
 									height={104}
 									src="/assets/estratonicos-navbar-md.png"
@@ -67,17 +81,17 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 									className="block"
 								>
 									<div className="sm:block lg:block w-52  transition-all duration-300">
-										<Estratonico className="2xl:w-[17rem] xl:w-[15rem] lg:w-[12rem] w-[10rem]" />
+										<Estratonico className="2xl:w-[12rem] xl:w-[15rem] lg:w-[10rem] w-[10rem] 2xl:mb-4" />
 									</div>
 								</Link>
 							</div>
 
 							{/* LINKS */}
-							<ul className="hidden md:flex origin-center gap-6 xl:gap-16 text-center font-semibold pb-4">
+							<ul className="hidden md:flex origin-center gap-6 lg:gap-[40px] xl:gap-[86px] text-center font-semibold pb-8">
 								{Object.values(navigation).map((item) => (
 									<li
 										key={item.name}
-										className="block max-w-[155px] nav-hover text-white lg:text-xl"
+										className="block max-w-[155px] nav-hover text-white text-[16px] lg:text-[18px] xl:text-[16px]"
 									>
 										<Link
 											href={item.href}
@@ -92,9 +106,30 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 
 							<PopoverGroup
 								as="div"
-								className="sm:pb-3 pb-3 absolute right-3 sm:right-4 lg:right-20"
+								className="sm:pb-5 pb-3 absolute right-3 sm:right-4 lg:right-14"
 							>
-								<div className="flex items-center justify-between gap-2 sm:gap-4">
+								<div className="flex items-center justify-between gap-2 sm:gap-2">
+									{/* LANGUAGE SELECTION */}
+									<Popover className="flex items-center">
+										{() => (
+											<>
+												<PopoverButton
+													className="focus:outline-none">
+													<LogoDisplayerSVG
+														isLanguage={true}
+														isOpen={true}
+														idiomaSelected={idiomaSelected}
+														isInstagram={false}
+													/>
+												</PopoverButton>
+												<UpdateLanguagePanel
+													links={idioma}
+													setIdioma={setIdioma}
+													idiomaSelected={idiomaSelected}
+												/>
+											</>
+										)}
+									</Popover>
 									{/* SOCIAL MEDIA */}
 									<Popover className="flex items-center">
 										{() => (
@@ -107,6 +142,7 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 												{/* SOCIAL MEDIA NAV MENU */}
 												<NavigationPanel
 													links={socials}
+													socials={true}
 												/>
 											</>
 										)}
@@ -123,26 +159,7 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 												</PopoverButton>
 												<NavigationPanel
 													links={musicPlatforms}
-												/>
-											</>
-										)}
-									</Popover>
-									{/* LANGUAGE SELECTION */}
-									<Popover className="flex items-center">
-										{() => (
-											<>
-												<PopoverButton className="focus:outline-none">
-													<LogoDisplayerSVG
-														isLanguage={true}
-														isOpen={true}
-														idiomaSelected={idiomaSelected}
-														isInstagram={false}
-													/>
-												</PopoverButton>
-												<UpdateLanguagePanel
-													links={idioma}
-													setIdioma={setIdioma}
-													idiomaSelected={idiomaSelected}
+													socials={false}
 												/>
 											</>
 										)}

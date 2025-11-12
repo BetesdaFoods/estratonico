@@ -8,11 +8,11 @@ export default function Footer({
 }) {
 	return (
 	<footer className="bg-black h-auto lg:h-[400px] w-full px-20 lg:px-16 xl:px-32 pt-12 lg:pt-20 xl:pt-16 pb-20 lg:pb-32 relative overflow-hidden z-0 isolate">
-		<div className="absolute top-[25%] left-[-80px] lg:top-[-90px] lg:left-[25%] xl:top-[-150px] xl:left-[25%] select-none opacity-100 z-0 pointer-events-none">
+		<div className="absolute top-[25%] left-[-80px] lg:top-[-90px] lg:left-[25%] xl:top-[-130px] xl:left-[25%] select-none opacity-100 z-0 pointer-events-none">
 			<img
 				src="/assets/Frame_627.svg"
 				alt="circle right"
-				className="block opacity-30 lg:w-[180px] xl:w-[320px] w-[160px] lg:scale-x-[-1]"
+				className="block opacity-30 lg:w-[180px] xl:w-[250px] w-[160px] lg:scale-x-[-1]"
 				style={{color: 'transparent'}}
 			/>
 		</div>
@@ -25,7 +25,7 @@ export default function Footer({
 			/>
 		</div>
 		<div className="hidden lg:block absolute lg:top-6 xl:top-0 lg:right-[-150px] xl:right-0 opacity-100 z-0 pointer-events-none">
-			<svg className="block lg:h-[300px] xl:h-[350px] w-auto" width="1098" height="406" viewBox="0 0 1098 406" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<svg className="block lg:h-[300px] xl:h-[320px] w-auto" viewBox="0 0 1098 406" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decorative background graphic" preserveAspectRatio="xMidYMid meet">
 				<g opacity="0.2">
 					<path d="M111.921 37.665L459.761 37.665L539.861 113.925L729.141 113.925L762.601 147.395H843.251L888.241 102.405L1019.92 102.405L1040.22 82.105" stroke="#F8F8F5" strokeWidth="2" strokeMiterlimit="10"/>
 					<path d="M1051.19 74.9756L877.269 74.9756L822.959 132.036H780.709L741.209 88.6957L576.619 88.6957" stroke="#F8F8F5" strokeMiterlimit="10"/>
@@ -54,7 +54,7 @@ export default function Footer({
 			<div className="flex justify-center">
 				<Estratonico className="w-full lg:w-[20rem]" />
 			</div>
-			<div className="flex flex-col items-stretch md:flex-row md:w-full md:items-start md:justify-evenly w-full xl:w-4/6">
+			<div className="flex flex-col items-stretch md:flex-row md:w-full md:items-start md:justify-evenly w-full xl:w-1/2">
 				{Object.entries(navigation).map(([title, links]) => {
 					if (title === "Idioma") {
 						return null;
@@ -66,7 +66,7 @@ export default function Footer({
 			</div>
 		</div>
 		<div className="hidden lg:block absolute bottom-0 lg:left-[-50px] xl:left-0 opacity-100 z-0 pointer-events-none">
-			<svg className="block lg:h-[250px] xl:h-[350px]  w-auto" width="1115" height="333" viewBox="0 0 1115 333" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<svg className="block lg:h-[250px] xl:h-[320px]  w-auto" viewBox="0 0 1115 333" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decorative background graphic" preserveAspectRatio="xMidYMid meet">
 				<g opacity="0.2">
 					<path d="M1002.91 397.22H655.069L574.969 320.96H385.689L352.229 287.49H271.579L226.589 332.48H94.9094L74.6094 352.78" stroke="#F8F8F5" strokeWidth="2" strokeMiterlimit="10"/>
 					<path d="M63.6406 359.91H237.561L291.871 302.85H334.121L373.621 346.19H538.211" stroke="#F8F8F5" strokeMiterlimit="10"/>
@@ -86,11 +86,11 @@ export default function Footer({
 				</g>
 			</svg>
 		</div>
-		<div className="hidden xl:block absolute xl:bottom-[-180px] xl:right-[10%] select-none opacity-100 z-0 pointer-events-none">
+		<div className="hidden xl:block absolute xl:bottom-[-200px] xl:right-[7%] select-none opacity-100 z-0 pointer-events-none">
 			<img
 				src="/assets/Frame_626.svg"
 				alt="circle left"
-				className="block opacity-30 md:w-[160px] lg:w-[200px] xl:w-[320px] w-[180px]"
+				className="block opacity-30 md:w-[160px] lg:w-[200px] xl:w-[370px] w-[180px]"
 				style={{color: 'transparent'}}
 			/>
 		</div>
