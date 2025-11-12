@@ -1,38 +1,43 @@
 import Image from "next/image";
 
 import { ReactNode } from "react";
+import Button from "./Button";
 
 interface ContactBorderProps {
 	className: string;
 	children?: ReactNode;
+	handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+	status: "idle" | "loading" | "success" | "error";
+	message: string;
+	idioma: string;
 }
 
-const ContactBorder = ({ className, children }: ContactBorderProps) => {
+const ContactBorder = ({ className, handleSubmit, status, message, idioma }: ContactBorderProps) => {
 		return (
-			<div className="absolute inset-0 z-0 flex justify-center items-center">
+			<div className="absolute inset-0 z-0 flex justify-center lg:items-center w-full h-full">
 				{/* Esquinas decorativas sin eventos */}
 				<img
 					src="/assets/contact/Frame_633.svg"
 					alt="Contact Border Left Up"
-					className="absolute top-[-15%] lg:top-0 left-[-8%] lg:left-0 pointer-events-none w-[35%] lg:w-[30%] xl:w-auto"
+					className="absolute top-[-15%] lg:top-0 left-[-8%] lg:left-0 pointer-events-none w-[35%] lg:w-[27%] xl:w-[27%]"
 				/>
 				<img
 					src="/assets/contact/Frame_630.svg"
 					alt="Contact Border Right Up"
-					className="absolute top-[-15%] lg:top-0 right-[-1%] lg:right-0 pointer-events-none w-[35%] lg:w-[30%] xl:w-auto"
+					className="absolute top-[-15%] lg:top-0 right-[-1%] lg:right-0 pointer-events-none w-[35%] lg:w-[35%] xl:w-[38%]"
 				/>
 				<img
 					src="/assets/contact/Frame_628.svg"
 					alt="Contact Border Left Bottom"
-					className="absolute bottom-[-15%] lg:bottom-0 left-[-1%] lg:left-0 pointer-events-none w-[35%] lg:w-[30%] xl:w-auto"
+					className="absolute bottom-0 lg:bottom-0 left-[-1%] lg:left-0 pointer-events-none w-[35%] lg:w-[35%] xl:w-[38%]"
 				/>
 				<img
 					src="/assets/contact/Frame_629.svg"
 					alt="Contact Border Right Bottom"
-					className="absolute bottom-[-15%] lg:bottom-0 right-[-5%] lg:right-0 pointer-events-none w-[35%] lg:w-[30%] xl:w-auto"
+					className="absolute bottom-0 lg:bottom-0 right-[-5%] lg:right-0 pointer-events-none w-[35%] lg:w-[27%] xl:w-[27%]"
 				/>
 				{/* Fondo centrado sin eventos */}
-				<svg width="1290" height="419" viewBox="0 0 1290 419" fill="none" xmlns="http://www.w3.org/2000/svg" className={className + "pointer-events-none hidden lg:block"}>
+				<svg viewBox="0 0 1290 419" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${className} pointer-events-none hidden lg:block mx-auto`} role="img" aria-label="Decorative border background" preserveAspectRatio="xMidYMid meet">
 					<g filter="url(#filter0_d_1619_22162)">
 						<path d="M141.109 344.241L134.509 349.744H94.0165L67.8467 324.938V178.618L71.9721 175.866V95.3937L67.8467 91.5415V86.0172L88.791 60.9568H877.355L882.326 66.4599H929.694L957.789 36.7007H1070.72L1081.74 48.2784H1108.46L1120.58 36.1504H1202.94L1243.41 76.9371L1243.96 157.113L1238.19 161.262L1238.46 207.827L1242.86 212.78L1243.41 322.186L1215.32 352.221L1020.05 351.67L1004.33 336.791L849.81 336.24L811.814 371.524H623.125L616.799 365.724H259.286L239.717 337.341H189.599L184.627 343.416L141.109 344.241Z" fill="#4A3385"/>
 						<path d="M1258.48 125.641V56.5344L1229.92 28.2356H1197L1179.33 8.36081H1165.18L1160.57 2.0957H1115.68L1109.96 8.91112H955.208L944.609 23.3251H840.417L822.476 4.27579H662.538L631.27 35.0298H387.829L373.422 18.4358H41.0422L8.12368 52.4494V119.122L15.4648 126.191V138.425L29.618 152.585V189.329L1.05762 219.533V358.572L45.6542 404.015H115.024L120.461 409.2" stroke="#4A3385" strokeMiterlimit="10"/>
@@ -97,8 +102,142 @@ const ContactBorder = ({ className, children }: ContactBorderProps) => {
 							<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1619_22162" result="shape"/>
 						</filter>
 					</defs>
+					{/* WEB */}
+					<foreignObject x="70" y="35" width="1170" height="340" className="hidden xl:block">
+						<div {...{ xmlns: "http://www.w3.org/1999/xhtml" }} className="w-full h-full pointer-events-auto flex justify-center items-center">
+							<form
+								className="py-16 w-[85%] lg:w-[62%] xl:w-[90%] px-4 flex flex-col gap-3 mx-auto"
+								onSubmit={handleSubmit}
+							>
+								<img
+									src="/assets/contact/Frame_634.svg"
+									alt="Contact Close"
+									className="z-10 absolute top-[2.5rem] lg:top-14 xl:top-10 right-4 lg:right-2 xl:right-10 w-[10px] lg:w-[15px] xl:w-[20px] h-auto pointer-events-none select-none"
+								/>
+								<div className="flex flex-row lg:justify-center gap-2 lg:gap-10 lg:w-full lg:px-0">
+									<div className="relative w-[10%] lg:w-[9%] xl:w-[12%] flex-shrink-0">
+										<svg viewBox="0 0 110 87" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-[-3px] lg:bottom-[1.7rem] xl:bottom-0 left-0 w-[41px] lg:w-[64px] xl:w-[115px] h-auto" role="img" aria-label="Decorative envelope icon" preserveAspectRatio="xMidYMid meet">
+											<path d="M100.834 25.5C100.834 20.825 96.7087 17 91.667 17H18.3337C13.292 17 9.16699 20.825 9.16699 25.5M100.834 25.5V76.5C100.834 81.175 96.7087 85 91.667 85H18.3337C13.292 85 9.16699 81.175 9.16699 76.5V25.5M100.834 25.5L55.0003 55.25L9.16699 25.5" stroke="#F3F3F3" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+										</svg>
+									</div>
+									<div className="flex flex-col w-[85%] lg:w-full lg:px-0 xl:mt-10">
+										<h4 className="text-white font-orbitron text-[1.2rem] lg:text-[1.8rem] xl:text-[2.5rem] font-bold">
+											{idioma === 'es' ? 'Únete a la travesía musical' : 'Join the musical journey'}
+										</h4>
+										<p className="text-white mb-2 text-[0.8rem] lg:text-[1rem] xl:text-[1.3rem] xl:mt-[-8px]">
+											{idioma === 'es' ? 'Recibe las últimas novedades directamente en tu inbox.' : 'Receive the latest updates directly in your inbox.'}
+										</p>
+										<div className="flex flex-row items-center lg:flex-col gap-2 lg:gap-0">
+											<input
+												type="text"
+												placeholder={idioma === 'es' ? 'Email de contacto' : 'Contact email'}
+												name="email"
+												required
+												className="uppercase text-[0.7rem] lg:text-[1rem] xl:text-[20px] notched-shape notched-shape-sm py-2 lg:py-2 xl:py-5 px-3 lg:px-6 xl:px-12 flex-1 h-[80%] lg:h-auto w-full font-roboto font-light overflow-hidden placeholder-white hover:cursor-text focus:bg-white focus:text-black focus:placeholder-black transition-colors duration-300"
+											/>
+										</div>
+									</div>
+								</div>
+								<div className="w-full flex justify-center items-center">
+									<Button
+										sm
+										submit
+										disabled={status === "loading" || status === "success"}
+										className={`uppercase lg:mt-2 xl:mt-4 w-24 lg:w-24 xl:w-36 lg:py-1 xl:py-2 h-[80%] lg:h-auto text-center font-roboto text-[0.7rem] lg:text-[0.8rem] xl:text-[1.125rem] mt-0 lg:mt-0 ${status === "loading" ? "hover:cursor-wait" : status === "success" ? "hover:cursor-not-allowed" : ""}`}
+									>
+										{idioma === 'es' ? (
+											status === "loading"
+												? "Enviando..."
+												: status === "success"
+												? "¡Listo!"
+												: "Enviar"
+										) : (
+											status === "loading"
+												? "Sending..."
+												: status === "success"
+												? "Done!"
+												: "Send"
+										)}
+									</Button>
+								</div>
+								{status === "error" && (
+									<p className="text-red-500 flex justify-center">{message}</p>
+								)}
+								{status === "success" && (
+									<p className="text-green-500 flex justify-center">{message}</p>
+								)}
+							</form>
+						</div>
+					</foreignObject>
+					{/* TABLET */}
+					<foreignObject x="70" y="35" width="1170" height="340" className="hidden lg:block xl:hidden">
+						<div {...{ xmlns: "http://www.w3.org/1999/xhtml" }} className="w-full h-full pointer-events-auto flex justify-center items-center">
+							<form
+								className="py-16 w-[85%] lg:w-[95%] xl:w-[90%] px-4 flex flex-col gap-3 mx-auto"
+								onSubmit={handleSubmit}
+							>
+								<img
+									src="/assets/contact/Frame_634.svg"
+									alt="Contact Close"
+									className="z-10 absolute top-[2.5rem] lg:top-10 xl:top-10 right-4 lg:right-8 xl:right-10 w-[10px] lg:w-[20px] xl:w-[20px] h-auto pointer-events-none select-none"
+								/>
+								<div className="flex flex-row lg:justify-center gap-2 lg:gap-10 lg:w-full lg:px-0">
+									<div className="relative w-[10%] lg:w-[10%] xl:w-[12%] flex-shrink-0">
+										<svg viewBox="0 0 110 87" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-[-3px] lg:bottom-0 xl:bottom-0 left-0 w-[41px] lg:w-[115px] xl:w-[115px] h-auto" role="img" aria-label="Decorative envelope icon" preserveAspectRatio="xMidYMid meet">
+											<path d="M100.834 25.5C100.834 20.825 96.7087 17 91.667 17H18.3337C13.292 17 9.16699 20.825 9.16699 25.5M100.834 25.5V76.5C100.834 81.175 96.7087 85 91.667 85H18.3337C13.292 85 9.16699 81.175 9.16699 76.5V25.5M100.834 25.5L55.0003 55.25L9.16699 25.5" stroke="#F3F3F3" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+										</svg>
+									</div>
+									<div className="flex flex-col w-[85%] lg:w-full lg:px-0 xl:mt-10">
+										<h4 className="text-white font-orbitron text-[1.2rem] lg:text-[47px] xl:text-[2.5rem] font-bold">
+											{idioma === 'es' ? 'Únete a la travesía musical' : 'Join the musical journey'}
+										</h4>
+										<p className="text-white mb-2 text-[0.8rem] lg:text-[24px] xl:text-[1.3rem] xl:mt-[-8px]">
+											{idioma === 'es' ? 'Recibe las últimas novedades directamente en tu inbox.' : 'Receive the latest updates directly in your inbox.'}
+										</p>
+										<div className="flex flex-row items-center lg:flex-col gap-2 lg:gap-0">
+											<input
+												type="text"
+												placeholder={idioma === 'es' ? 'Email de contacto' : 'Contact email'}
+												name="email"
+												required
+												className="uppercase text-[0.7rem] lg:text-[20px] xl:text-[20px] notched-shape notched-shape-sm py-2 lg:py-5 xl:py-5 px-3 lg:px-10 xl:px-12 flex-1 h-[80%] lg:h-auto w-full font-roboto font-light overflow-hidden placeholder-white hover:cursor-text focus:bg-white focus:text-black focus:placeholder-black transition-colors duration-300"
+											/>
+										</div>
+									</div>
+								</div>
+								<div className="w-full flex justify-center items-center">
+									<Button
+										sm
+										submit
+										disabled={status === "loading" || status === "success"}
+										className={`uppercase lg:mt-2 xl:mt-4 w-24 lg:w-[120px] xl:w-36 lg:py-2 xl:py-2 h-[80%] lg:h-auto text-center font-roboto text-[0.7rem] lg:text-[17px] xl:text-[1.125rem] mt-0 lg:mt-0 ${status === "loading" ? "hover:cursor-wait" : status === "success" ? "hover:cursor-not-allowed" : ""}`}
+									>
+										{idioma === 'es' ? (
+											status === "loading"
+												? "Enviando..."
+												: status === "success"
+												? "¡Listo!"
+												: "Enviar"
+										) : (
+											status === "loading"
+												? "Sending..."
+												: status === "success"
+												? "Done!"
+												: "Send"
+										)}
+									</Button>
+								</div>
+								{status === "error" && (
+									<p className="text-red-500 flex justify-center">{message}</p>
+								)}
+								{status === "success" && (
+									<p className="text-green-500 flex justify-center">{message}</p>
+								)}
+							</form>
+						</div>
+					</foreignObject>
 				</svg>
-				<svg width="365" height="159" viewBox="0 0 365 159" fill="none" xmlns="http://www.w3.org/2000/svg" className={className + "pointer-events-none lg:hidden"}>
+				<svg width="365" height="159" viewBox="0 0 365 159" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${className} pointer-events-none lg:hidden translate-y-4`}>
 					<g filter="url(#filter0_d_6_74277)">
 						<path d="M39.9263 130.631L38.0587 132.719H26.6015L19.1969 123.306V67.7811L20.3642 66.737V36.1996L19.1969 34.7378V32.6415L25.123 23.1317H248.244L249.65 25.22H263.053L271.002 13.9271H302.955L306.074 18.3206H313.634L317.064 13.7183H340.368L351.819 29.1958L351.974 59.6207L350.34 61.195L350.418 78.8652L351.663 80.7447L351.819 122.262L343.869 133.659L288.619 133.45L284.171 127.804L240.45 127.595L229.699 140.984H176.31L174.521 138.783H73.3639L67.8269 128.013H53.6461L52.2394 130.318L39.9263 130.631Z" fill="#4A3385"/>
 						<path d="M356.081 47.6778V21.4535L348 10.7148H338.686L333.687 3.17286H329.683L328.378 0.79541H315.676L314.059 3.38169H270.272L267.273 8.85143H237.792L232.716 1.6227H187.462L178.615 13.2931H109.735L105.658 6.99606H11.6127L2.29851 19.9034V45.2039L4.37563 47.8866V52.529L8.38024 57.9024V71.8458L0.299194 83.3074V136.069L12.9176 153.314H32.5456L34.084 155.281" stroke="#4A3385" strokeMiterlimit="10"/>
@@ -163,11 +302,72 @@ const ContactBorder = ({ className, children }: ContactBorderProps) => {
 							<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_6_74277" result="shape"/>
 						</filter>
 					</defs>
+					<foreignObject x="20" y="13" width="330" height="128">
+						<div {...{ xmlns: "http://www.w3.org/1999/xhtml" }} className="w-full h-full pointer-events-auto flex justify-center items-center">
+							<form
+								className="py-16 w-full lg:w-[62%] xl:w-[90%] px-2 flex flex-col gap-3 mx-auto"
+								onSubmit={handleSubmit}
+							>
+								<img
+									src="/assets/contact/Frame_634.svg"
+									alt="Contact Close"
+									className="z-10 absolute top-[10px] lg:top-14 xl:top-10 right-3 lg:right-2 xl:right-10 w-[10px] lg:w-[15px] xl:w-[20px] h-auto pointer-events-none select-none"
+								/>
+								<div className="flex flex-row lg:justify-center gap-4 lg:gap-10 lg:w-full lg:px-0">
+									<div className="relative w-[10%] lg:w-[9%] xl:w-[12%] flex-shrink-0">
+										<svg viewBox="0 0 110 87" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-1 lg:bottom-[1.7rem] xl:bottom-0 left-0 w-[38px] lg:w-[64px] xl:w-[115px] h-auto" role="img" aria-label="Decorative envelope icon" preserveAspectRatio="xMidYMid meet">
+											<path d="M100.834 25.5C100.834 20.825 96.7087 17 91.667 17H18.3337C13.292 17 9.16699 20.825 9.16699 25.5M100.834 25.5V76.5C100.834 81.175 96.7087 85 91.667 85H18.3337C13.292 85 9.16699 81.175 9.16699 76.5V25.5M100.834 25.5L55.0003 55.25L9.16699 25.5" stroke="#F3F3F3" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+										</svg>
+									</div>
+									<div className="flex flex-col w-[85%] lg:w-full lg:px-0 xl:mt-10">
+										<h4 className="text-white font-orbitron text-[15px] lg:text-[1.8rem] xl:text-[2.5rem] font-bold">
+											{idioma === 'es' ? 'Únete a la travesía musical' : 'Join the musical journey'}
+										</h4>
+										<p className="text-white mb-2 text-[9px] lg:text-[1rem] xl:text-[1.3rem] xl:mt-[-8px]">
+											{idioma === 'es' ? 'Recibe las últimas novedades directamente en tu inbox.' : 'Receive the latest updates directly in your inbox.'}
+										</p>
+										<div className="flex flex-row items-center lg:flex-col gap-2 lg:gap-0">
+											<input
+												type="text"
+												placeholder={idioma === 'es' ? 'Email de contacto' : 'Contact email'}
+												name="email"
+												required
+												className="uppercase text-[9px] lg:text-[1rem] xl:text-[20px] notched-shape notched-shape-sm py-2 lg:py-2 xl:py-5 px-4 lg:px-6 xl:px-12 flex-1 h-[80%] lg:h-auto w-full font-roboto font-normal overflow-hidden placeholder-white hover:cursor-text focus:bg-white focus:text-black focus:placeholder-black transition-colors duration-300"
+											/>
+											<Button
+												sm
+												submit
+												disabled={status === "loading" || status === "success"}
+												className={`uppercase lg:mt-2 xl:mt-4 w-16 lg:w-24 xl:w-36 py-2 xl:py-2 h-[80%] lg:h-auto text-center font-roboto text-[9px] lg:text-[0.8rem] xl:text-[1.125rem] mt-0 lg:mt-0 ${status === "loading" ? "hover:cursor-wait" : status === "success" ? "hover:cursor-not-allowed" : ""}`}
+											>
+												{idioma === 'es' ? (
+													status === "loading"
+														? "Enviando..."
+														: status === "success"
+														? "¡Listo!"
+														: "Enviar"
+												) : (
+													status === "loading"
+														? "Sending..."
+														: status === "success"
+														? "Done!"
+														: "Send"
+												)}
+											</Button>
+										</div>
+									</div>
+								</div>
+								
+								{status === "error" && (
+									<p className="text-red-500 flex justify-center">{message}</p>
+								)}
+								{status === "success" && (
+									<p className="text-green-500 flex justify-center">{message}</p>
+								)}
+							</form>
+						</div>
+					</foreignObject>
 				</svg>
-				{/* Formulario u otros hijos con eventos */}
-				<div className="w-full h-full pointer-events-auto flex justify-center items-center">
-					{children}
-				</div>
 			</div>
 	);
 };

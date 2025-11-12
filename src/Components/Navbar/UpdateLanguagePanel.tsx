@@ -19,7 +19,7 @@ function UpdateLanguagePanel({ links, setIdioma, idiomaSelected }: UpdateLanguag
 		>
 			<PopoverPanel
 				anchor="bottom end"
-				className="bg-gradient-to-b from-neutral-950/90 to-neutral-800/90 md:to-neutral-800/70 z-20 w-full md:w-fit md:rounded-2xl [--anchor-gap:20px] sm:[--anchor-gap:17px] md:[--anchor-gap:45px] md:py-4 md:text-xl"
+				className="bg-gradient-to-b from-neutral-950/90 to-neutral-800/90 md:to-neutral-800/75 z-20 w-full md:w-fit md:rounded-md [--anchor-gap:20px] sm:[--anchor-gap:17px] md:[--anchor-gap:25px] md:py-4 md:text-xl"
 			>
 				<div className="py-2 space-y-1">
 					{links.map((item) => (
@@ -37,7 +37,7 @@ function UpdateLanguagePanel({ links, setIdioma, idiomaSelected }: UpdateLanguag
 									setIdioma(code);
 								}
 							}}
-							className="flex w-full gap-2 items-center rounded-md pl-10 pr-20 py-2 font-roboto font-medium text-white hover:bg-black/50"
+							className="flex w-full gap-3 items-center rounded-md pl-4 pr-24 py-1 font-roboto font-medium text-white opacity-70 hover:opacity-100 duration-200 hover:underline"
 						>
 							{item.logo && (
 								<Image
@@ -45,7 +45,7 @@ function UpdateLanguagePanel({ links, setIdioma, idiomaSelected }: UpdateLanguag
 									alt={item.name}
 									width={25}
 									height={25}
-									className="w-[25px] h-[25px] md:w-[30px] md:h-[30px]"
+									className="w-[25px] h-[25px] md:w-[25px] md:h-[25px]"
 								/>
 							)}
 							<span>{item.name}</span>

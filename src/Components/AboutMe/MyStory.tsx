@@ -1,131 +1,163 @@
 "use client";
 import { useState } from "react";
 import LineEllipsis from "../ui/LineEllipsis";
+import { SquareBlueInfo } from "../ui/SquareBlueInfo";
+import Rectangle from "../ui/Rectangle";
+import { useLanguage } from "../Context/LanguageContext";
+import VectorLines from "../ui/VectorLines";
+import IndicatorLinesVector from "../ui/IndicatorLinesVector";
+import VectorLinesGrafic from "../ui/VectorLinesGrafic";
+import CenterItem from "../ui/CenterItem";
 
 function MyStory() {
 	const [showMore, setShowMore] = useState(false);
-
+	const { idioma } = useLanguage();
 	return (
-		<section id="mi_historia" className="w-screen bg-grayBackground py-20 xl:py-28 px-12 md:px-24 xl:px-32 2xl:px-36 xl:flex xl:gap-20">
-			<div className="md:w-2/3 lg:w-1/2">
-				<h1
-					className="font-black uppercase 
-				text-4xl
-				sm:text-5xl
-				md:text-6xl
-				lg:text-[4.3rem]
-				xl:text-[4.9rem]
-				2xl:text-[7.5rem]"
-				>
-					Esta es <br />
-					<span className="bg-gradient-to-r from-10% from-[#b41619] to-[#ff5558] text-transparent bg-clip-text">
-						mi historia
+		<section id="mi_historia" className="w-screen xl:px-0 relative h-[1450px] items-center lg:h-[1000px] xl:h-[1000px] py-0 lg:py-12 xl:py-12 flex flex-col lg:gap-0 xl:gap-0 isolate z-0">
+			<div className="w-[85%] lg:w-[87%] xl:w-[83%] items-center flex flex-col lg:flex-row  z-10 lg:gap-6 xl:gap-12">
+				<span className="w-full lg:w-[55%] xl:w-[52%] lg:justify-start xl:justify-end flex mt-8 lg:mt-0 xl:mt-0">
+					<SquareBlueInfo
+						title={idioma === 'es' ? "Mi identidad" : "My identity"}
+						className="w-full lg:w-full xl:w-[100rem] h-auto"
+						data={idioma === 'es' ? "Soy un creador anónimo, un viajero sonoro que construye puentes invisibles entre épocas, géneros musicales y sentimientos humanos.<br /><br />La magia renace en cada melodía de <strong>Estratonico</strong>, donde no importa la fecha en que fueron creadas, sino la huella que dejan en el alma de quien las escucha.<br /><br /><strong>Estratonico</strong> es una presencia sin rostro, un creador anónimo que prefiere ser sentido antes que visto. El misterio no busca ocultamiento, sino recordarnos que lo esencial está en la música y las emociones que despierta, no en quién la crea." :
+							"I am an anonymous creator, a sonic traveler who builds invisible bridges between eras, musical genres, and human feelings.<br /><br />Magic is reborn in each of Estratonico's melodies, where the date of their creation doesn't matter, but rather the mark they leave on the soul of those who listen.<br /><br /><strong>Estratonico</strong> is a faceless presence, an anonymous creator who prefers to be felt rather than seen. Mystery doesn't seek concealment, but rather to remind us that the essence lies in the music and the emotions it awakens, not in who creates it."}
+					/>
+					
+				</span>
+				<span className="flex flex-col w-full lg:w-[45%] xl:w-[48%] mt-8 lg:mt-0 xl:mt-0">
+					<span className=" w-full flex  justify-center mb-4 lg:mb-0 relative">
+						<h2 className=" font-roboto font-black text-[25px] lg:text-[1.9rem] xl:text-[35px] text-white">
+							{idioma === 'es' ? (
+								<>
+									<span className="text-[#35DBE5]">PROPÓSITO</span>{' '}Y MISIÓN
+								</>
+							) : (
+								<>
+									<span className="text-[#35DBE5]">PURPOSE</span>{' '}AND MISSION
+								</>
+							)}
+						</h2>
 					</span>
-				</h1>
-
-				<LineEllipsis className="flex items-center flex-grow" sm />
-			</div>
-
-			<div
-				className="pt-8 pr-8
-				md:pt-12 md:pr-0
-				font-thin
-				sm:flex sm:flex-col sm:gap-6
-				md:flex-row md:gap-12 md:text-justify
-				xl:flex-col xl:gap-6 xl:w-1/2 xl:pt-0
-				lg:text-lg
-				xl:text-xl
-				2xl:text-2xl"
-			>
-				{/* Paragraphs 1 & 2 */}
-				<div className="flex flex-col sm:gap-6 md:w-1/2 xl:w-full">
-					{/* Highlighted first paragraph */}
-					<p className="font-black">
-						Soy un artista con una profunda pasión por la música.
-						Mis influencias musicales derivan de las emociones
-						provenientes de diferentes movimientos, donde las
-						melodías y las letras van de la mano con una
-						incontrolable manifestación del pensamiento y las
-						emociones.
-					</p>
-
-					{/* Show more with button */}
-					<div className="relative sm:hidden">
-						<p
-							className={`mt-6
-							${
-								!showMore &&
-								"bg-gradient-to-b from-white to-neutral-600 text-transparent bg-clip-text"
-							}`}
-						>
-							Mi sensibilidad musical es muy amplia, crecí
-							escuchando diferentes géneros, y asi descubrí
-							estilos maravillosos de expresión del mismo arte.
-						</p>
-
-						{/* Either show the button or more text */}
-						{!showMore ? (
-							<button
-								onClick={() => setShowMore(true)}
-								className="w-full flex justify-center absolute bottom-2"
-							>
-								<svg
-									width="54"
-									height="31"
-									viewBox="0 0 54 31"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M3 3L27 26L51 3"
-										stroke="white"
-										strokeWidth="6"
-										strokeLinecap="round"
-									/>
-								</svg>
-							</button>
-						) : (
-							<>
-								<p className="mt-6">
-									Siento como nuestras moléculas vibran de
-									forma particular con cada onda de sonido que
-									esta produce, me inspira la reacción
-									singular que se genera en todos nuestros
-									seres.
-								</p>
-								<p className="mt-6">
-									Espero poder acompañarte y generar en ti la
-									misma alegría que me produce la creación de
-									mi contenido, siempre en mi mente poder
-									compartirla contigo.
-								</p>
-							</>
-						)}
+					<div
+						className="
+						font-thin
+						flex flex-row
+						lg:justify-end
+						xl:justify-center
+						gap-3
+						lg:gap-4 xl:gap-6
+						w-full"
+					>
+						<Rectangle
+							className="my-6 md:my-8 lg:my-4 xl:my-8"
+							width="w-full lg:w-[85%] xl:w-[100%]"
+							icon={
+							<svg width="106" height="109" viewBox="0 0 106 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g clipPath="url(#clip0_1707_22162)">
+								<path d="M105.989 53.6175C105.917 52.8538 105.855 52.0229 105.793 51.1457C105.644 49.0505 105.479 46.6715 105.051 44.3286C102.36 29.4613 95.1625 17.8192 83.6551 9.72752C72.5034 1.88873 59.6349 -1.23854 45.4002 0.438625C34.3156 1.74423 24.8292 6.14097 17.1988 13.4998C5.9647 24.3472 0.174914 37.9658 0.00477806 53.9839C-0.118957 65.2132 2.77851 75.3948 8.60954 84.2348C19.1064 100.15 34.2176 108.479 53.5307 108.979C53.9225 108.99 54.3143 108.995 54.701 108.995C64.0636 108.995 73.184 106.059 81.8197 100.263C97.5134 89.7358 105.422 74.5175 106 53.7362V53.6743L105.989 53.6175ZM38.966 100.439C19.4931 94.6693 2.25779 72.7527 6.76382 45.7013C7.23299 46.0264 7.697 46.3412 8.15585 46.656C10.2129 48.0545 12.1566 49.3808 13.8992 50.9392C15.5851 52.4513 15.1881 54.8096 14.5592 56.5229C14.2704 57.3176 13.9353 58.1175 13.6105 58.8967C13.2909 59.6708 12.9558 60.4758 12.6567 61.286C11.4297 64.6094 11.5173 67.8708 12.9197 70.7194C14.3168 73.568 16.8998 75.7612 20.0087 76.7417C22.1122 77.4023 24.0507 77.0772 25.9273 76.7675C26.5718 76.6591 27.1802 76.5559 27.7988 76.494C31.1294 76.1534 34.4135 76.7211 37.5585 78.1815C39.1619 78.9246 40.425 80.3902 41.0231 82.1964C41.6881 84.2038 41.4819 86.4383 40.4611 88.327C38.4762 91.9962 37.9864 95.882 38.966 100.439ZM45.4879 91.1034C48.2152 85.5868 47.7099 80.3076 44.0133 75.8386C41.6521 72.9797 38.1772 71.3593 33.3927 70.8742C32.243 70.7555 31.0521 70.6988 29.8147 70.6988C28.0205 70.6988 26.1387 70.8226 24.195 71.0652C22.1947 71.318 20.2355 70.5698 18.9621 69.0681C17.7763 67.6644 17.3948 65.8479 17.9206 64.0779C18.2454 62.9838 18.6785 61.8743 19.091 60.8009C19.6014 59.485 20.1272 58.1278 20.4985 56.719C21.7358 51.9817 20.2922 47.9462 16.3224 45.046C14.09 43.4152 11.7132 41.929 9.41383 40.4944L8.97044 40.2157C8.26412 39.7719 8.17131 39.5087 8.44456 38.714C13.9353 22.9952 23.664 13.0457 38.1823 8.33418C31.1191 15.8943 26.711 25.6064 24.4116 38.5334C24.0662 40.4789 23.9063 42.4657 23.7517 44.3854L23.6795 45.2885C23.5557 46.8108 24.0507 47.7036 24.4838 48.1835C25.0096 48.7615 25.7314 49.066 26.577 49.0711C27.6132 49.0763 29.3404 48.648 29.5724 45.6704C30.6087 32.5782 34.362 22.2108 41.054 13.9849C42.6935 11.9723 44.8537 10.2487 46.9417 8.58189C47.3542 8.25162 47.7615 7.92651 48.1688 7.59623C50.5094 5.69717 53.3605 5.98616 56.3817 6.29579L57.0262 6.36287C65.4093 7.17823 73.318 10.192 80.5308 15.3112C81.1649 15.7653 81.1855 15.8737 81.0051 16.4568C79.9791 19.7802 78.9841 23.3203 78.0406 26.9687C77.1487 30.4211 78.1643 33.5845 80.8968 35.8758C82.9951 37.6355 85.2688 39.2146 87.4806 40.7524C89.2541 41.9858 90.3522 43.4359 90.842 45.1904C92.265 50.2942 95.0645 53.8085 99.3952 55.9294C99.488 56.0688 99.6118 56.4249 99.6066 56.6519C99.2045 69.6822 94.3685 80.8288 85.2327 89.7823C78.154 96.7232 69.4358 101.042 59.3308 102.627C55.5362 103.22 51.3756 103.122 46.6221 102.327C46.4829 102.297 46.1375 102.038 46.024 101.806C43.9876 97.7656 43.8226 94.468 45.4879 91.1034ZM97.1835 45.4072C97.1113 45.2317 97.0443 45.0718 97.0133 44.9324C95.9771 40.6647 93.5023 37.3671 89.4345 34.8643C88.0116 33.987 86.6299 32.9601 85.2997 31.9693C83.7221 30.7978 83.2426 29.4148 83.784 27.6138C84.4284 25.4722 85.078 23.3254 85.7534 21.1013L86.1195 19.8937C93.8168 28.1505 98.2146 37.6922 99.5138 48.9576C98.4982 48.199 97.7661 47.3114 97.4206 46.0729C97.3536 45.8252 97.266 45.6033 97.1835 45.4072Z" fill="white"/>
+								<path d="M48.1072 33.3731L48.0969 30.9374C48.0969 30.5761 48.1175 30.4316 48.133 30.3749C48.1794 30.3491 48.3031 30.3026 48.5815 30.2562C50.9892 29.8846 53.4124 29.3892 55.753 28.9144C56.7842 28.7029 57.8205 28.4913 58.8516 28.29C60.852 27.903 62.8575 27.516 64.8991 27.1289L66.3324 26.8554V42.3988C61.151 41.8467 57.0626 44.0502 55.2684 48.4418C53.7062 52.2657 54.7632 55.8213 58.0267 57.7203C60.7385 59.2995 64.3423 59.1911 67.4306 57.4365C70.4466 55.7232 72.2717 52.8798 72.3078 49.8351C72.3903 43.0284 72.3697 36.1082 72.3439 29.4202C72.3387 27.2682 72.3284 25.1163 72.3284 22.9644C72.3284 21.8084 71.8541 21.1221 71.4571 20.7557C70.8797 20.219 70.0754 19.9713 69.1371 20.0332C68.6215 20.0694 68.1369 20.1674 67.6626 20.2655L60.2281 21.7104C55.32 22.6651 50.4066 23.6198 45.4933 24.559C43.0805 25.0234 42.1834 26.0865 42.1834 28.4964C42.1782 32.8261 42.1782 37.1609 42.1782 41.4906V46.9917C39.3478 46.5427 37.1102 47.3632 35.6667 48.2044C33.2693 49.5926 31.4597 51.9664 30.8204 54.5518C30.0006 57.8648 30.9853 60.7289 33.5271 62.4061C35.0016 63.3814 36.7236 63.882 38.4816 63.882C39.3529 63.882 40.2346 63.7581 41.1007 63.5053C43.694 62.7518 45.8078 60.9198 46.9008 58.4944C47.6278 56.8689 48.0196 54.8563 48.0557 52.5134C48.1691 46.1299 48.1382 39.6431 48.1072 33.3731Z" fill="white"/>
+								<path d="M67.9249 89.3333C69.3479 91.5678 71.9412 92.8218 74.7459 92.8218C75.8801 92.8218 77.0504 92.6153 78.1898 92.187C82.3917 90.6027 85.0056 86.7014 85.0211 81.995C85.0365 77.6447 85.0314 73.2893 85.0262 68.939C85.0262 66.5445 85.0211 64.15 85.0262 61.7556C85.7274 62.2716 86.3925 62.7619 87.0524 63.2624C88.5578 64.4132 89.0631 65.9304 88.5991 67.9017C87.9959 70.4613 89.3312 71.447 90.5582 71.8289C91.347 72.0714 92.1616 71.9785 92.8525 71.5605C93.6568 71.0703 94.2136 70.2136 94.4146 69.1351C95.1931 64.9551 94.1156 61.5904 91.213 59.1237C88.8001 57.0802 86.3306 55.0985 83.8713 53.2459C83.1547 52.7041 81.6338 52.1674 80.6594 52.7453C79.7468 53.282 79.1952 54.6392 79.1849 55.6404C79.1385 60.6719 79.1539 65.7808 79.1642 70.7245L79.1746 76.3237C75.5811 75.6063 72.5547 76.4372 69.9511 78.8471C66.8268 81.7319 65.9555 86.237 67.9249 89.3333Z" fill="white"/>
+								</g>
+								<defs>
+								<clipPath id="clip0_1707_22162">
+								<rect width="106" height="109" fill="white"/>
+								</clipPath>
+								</defs>
+							</svg>}
+							title={idioma === 'es' ? "Conexión Atemporal" : "Timeless Connection"}
+							text={idioma === 'es' ? "Crear canciones que trasciendan generaciones y lugares." : "Create songs that transcend generations and places."}
+						/>
+						<Rectangle
+							className="my-6 md:my-8 lg:my-4 xl:my-8"
+							width="w-full lg:w-[85%] xl:w-[100%]"
+							icon={
+							<svg width="140" height="95" viewBox="0 0 140 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g clipPath="url(#clip0_1707_22163)">
+								<path d="M139.994 27.794C139.994 25.2008 138.546 23.7635 135.917 23.7396C132.592 23.7096 129.516 23.7096 126.513 23.7396C123.956 23.7635 122.513 25.2188 122.454 27.8299C122.448 28.2012 122.43 28.5725 122.412 28.9498C122.358 30.1356 122.299 31.3573 122.501 32.579C122.931 35.1841 122.066 36.9748 119.313 39.1846C112.262 44.838 104.204 48.9104 94.6803 51.6353C91.2593 52.6115 87.7011 53.396 84.2622 54.1506C83.7199 54.2704 83.1775 54.3901 82.6352 54.5099C83.7497 53.4499 84.8702 52.3959 85.9847 51.3478C89.5249 48.0121 93.1843 44.5685 96.6292 41.0052C103.209 34.19 106.165 26.8178 105.659 18.4814C105.325 12.9538 102.494 7.74952 97.8927 4.19218C93.3512 0.682759 87.6952 -0.712626 82.3848 0.359365C77.5573 1.33554 73.6415 3.79692 70.7331 7.67765C66.2452 1.65294 59.868 -0.89229 52.2154 0.311455C44.1873 1.57509 38.7578 6.58769 36.5109 14.8103C34.3235 22.8233 36.3082 30.6386 42.2444 37.4179C45.4985 41.137 49.0805 44.6404 52.5492 48.03C53.908 49.3596 55.2669 50.6891 56.6079 52.0305C57.4781 52.8989 58.3721 53.7493 59.2661 54.5818C58.7297 54.462 58.1933 54.3422 57.6509 54.2224C54.1464 53.4379 50.5228 52.6294 47.0362 51.6353C37.1247 48.8086 28.2742 44.0535 20.7288 37.5078C19.6262 36.5496 19.1494 35.9207 19.2567 34.7469C19.4117 33.088 19.3759 31.4172 19.3401 29.8002C19.3282 29.2373 19.3163 28.6683 19.3103 28.1054C19.2925 25.1769 17.8621 23.7455 14.9417 23.7336C11.4491 23.7216 7.96254 23.7276 4.46999 23.7336C1.4304 23.7455 0.01192 25.1589 0.00595998 28.1772C0 49.0242 0 69.8711 0 90.7181C0 93.6226 1.33504 94.9761 4.19583 94.9881C7.15198 95 10.1141 95 13.0702 94.9941H14.8463C15.9489 94.9941 17.3376 94.8683 18.2733 93.8921C19.1971 92.9279 19.3163 91.5146 19.3163 90.3947C19.3163 88.4004 19.3163 86.4121 19.3163 84.3041V82.3637C56.2384 76.0695 89.9957 76.327 122.43 83.1423V84.879C122.43 86.8553 122.424 88.7298 122.436 90.6103C122.454 93.5987 123.831 94.9881 126.763 95C128.479 95.006 130.19 95.012 131.906 95.012C133.2 95.012 134.499 95.012 135.792 95.006C138.564 94.9941 139.97 93.6106 139.97 90.8917C139.994 70.1706 140 48.9403 139.994 27.794ZM129.552 87.5141V31.1537H132.973V87.5141H129.552ZM113.758 55.7436C113.633 54.3422 113.508 52.8989 113.967 52.0066C114.396 51.1742 115.6 50.4974 116.762 49.8387C117.406 49.4733 118.073 49.0961 118.675 48.6649C119.915 47.7785 121.137 46.8742 122.406 45.934V75.6563L113.883 74.0094V70.0568C113.883 65.9784 113.883 61.93 113.883 57.8816C113.883 57.1689 113.818 56.4443 113.758 55.7436ZM95.8246 59.7142C95.8186 59.283 95.8723 59.1812 95.8723 59.1752C95.8723 59.1752 95.9498 59.0853 96.3193 58.9656C99.2158 58.0373 102.136 56.9952 104.961 55.9891C105.527 55.7855 106.1 55.5819 106.672 55.3783V72.7817L95.8604 71.5121C95.8544 71.3863 95.8484 71.2665 95.8484 71.1467C95.8425 69.8232 95.8484 68.4997 95.8484 67.1822C95.8544 64.7268 95.8544 62.1995 95.8246 59.7142ZM27.4755 70.7994V73.6381L19.4057 75.0873V45.922L19.7573 46.1556C22.2129 47.7845 24.7518 49.4674 27.2312 51.1442C27.3086 51.1981 27.398 51.2939 27.4398 51.3598C27.4755 57.8217 27.4755 64.4213 27.4755 70.7994ZM34.6573 72.596V55.0728L35.5155 55.3783C38.5313 56.4503 41.6484 57.5582 44.6939 58.6841C44.7058 58.708 44.7237 58.732 44.7297 58.756C44.7654 62.3672 44.7595 65.9185 44.7595 69.6795V71.5061L34.6573 72.596ZM88.6905 60.9658V70.6197H74.321V62.5888L88.6905 60.9658ZM98.3636 25.3206C97.2729 29.0037 95.324 32.2257 92.5705 34.8967C87.3376 39.9632 82.1405 44.868 76.6335 50.0543C74.7203 51.8569 72.7952 53.6775 70.8523 55.51C68.7961 53.5277 66.7458 51.5634 64.7016 49.6111C58.9144 44.0715 53.4551 38.8433 48.0136 33.3575C44.8965 30.2134 43.0072 26.2429 42.5662 21.877C42.006 16.3614 45.5104 9.62999 52.3465 7.92319C53.2703 7.69562 54.2239 7.58183 55.1894 7.58183C57.5258 7.58183 59.9038 8.24659 61.9123 9.49824C64.3321 11.0134 65.9651 13.2352 66.5015 15.7505C66.6684 16.5231 66.9425 17.2777 67.3061 17.9364C67.9915 19.1881 69.2252 19.9427 70.602 19.9546C71.9728 19.9367 73.2243 19.23 73.9276 17.9843C74.315 17.3076 74.5236 16.559 74.6607 15.9841C75.4593 12.6783 77.7122 10.0672 81.0021 8.64185C84.596 7.07878 88.8514 7.26443 92.1056 9.12095C97.7616 12.3489 100.277 18.8587 98.3636 25.3206ZM51.983 70.979V60.5885L66.9962 62.6007V70.3802L51.983 70.979ZM7.15794 87.5021V31.1117H12.1226V87.4961H7.15794V87.5021Z" fill="white"/>
+								</g>
+								<defs>
+								<clipPath id="clip0_1707_22163">
+								<rect width="140" height="95" fill="white"/>
+								</clipPath>
+								</defs>
+							</svg>}
+							title={idioma === 'es' ? "Puentes Emocionales" : "Emotional Bridges"}
+							text={idioma === 'es' ? "Acompañar al oyente en sus momentos de duda, catarsis y celebración." : "Accompany the listener in their moments of doubt, catharsis, and celebration."}
+						/>
+						<Rectangle
+							className="my-6 md:my-8 lg:my-4 xl:my-8"
+							width="w-full lg:w-[100%] xl:w-[100%]"
+							icon={
+							<svg width="75" height="109" viewBox="0 0 89 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g clipPath="url(#clip0_1707_22164)">
+								<path d="M35.4777 97.4089C35.3469 95.0462 34.2467 91.8894 29.7489 90.282C28.4549 89.8172 27.0493 89.7543 25.8134 89.701L25.3045 89.6768C24.4079 89.6332 23.5112 89.6381 22.6485 89.6477C21.2284 89.6623 19.8908 89.6768 18.6112 89.4638C14.4431 88.7714 13.7548 87.4884 13.9099 84.2057C14.0408 81.4363 13.9972 78.633 13.9535 75.9217C13.9439 75.2342 13.9342 74.5515 13.9245 73.864C13.8808 70.2521 12.2475 68.4704 8.62217 68.0927C8.18597 68.0492 7.74007 67.9668 7.24571 67.8749C7.4105 67.4924 7.57529 67.1196 7.73523 66.7467C8.55432 64.8488 9.32495 63.0526 10.241 61.3774C12.8582 56.5744 14.1086 51.4036 14.065 45.5645C13.9923 35.6101 18.2962 27.7812 26.8652 22.3053C33.1659 18.277 40.4844 16.8245 48.622 17.9817C50.677 18.277 52.3637 17.1005 52.6448 15.188C52.9162 13.3385 51.5688 11.5762 49.6398 11.2615C48.5735 11.0872 47.5024 10.9613 46.4458 10.8935C34.3097 10.0995 24.1704 13.9002 16.309 22.1939C10.052 28.7979 7.01307 36.9077 7.27964 46.3053C7.38627 50.0866 6.58656 53.5726 4.83205 56.9763C3.4362 59.6828 2.07428 62.6749 0.547568 66.3885C-0.378152 68.6398 0.0435106 70.2908 0.557261 71.2785C1.31335 72.731 2.75282 73.7284 4.72543 74.169C5.43789 74.3288 6.16974 74.4498 6.90159 74.5321C7.0373 74.5466 7.12939 74.566 7.18755 74.5805C7.1924 74.6338 7.20209 74.7113 7.19724 74.8178C7.16816 76.9529 7.18755 79.1172 7.20694 81.2136C7.22148 82.7968 7.23602 84.3849 7.23117 85.9681C7.21663 89.6138 8.76273 92.3687 11.695 93.9374C13.8469 95.0898 16.0909 95.845 18.1799 96.1355C20.0798 96.397 21.9894 96.3389 23.8408 96.2856C24.5921 96.2614 25.3821 96.2421 26.1236 96.2421C28.0768 96.2421 28.8717 96.9974 28.9492 98.9389C29.0316 100.929 29.1334 103.04 29.2546 105.393C29.3612 107.426 30.7716 108.84 32.6812 108.84C32.6861 108.84 32.6909 108.84 32.6957 108.84C33.6554 108.835 34.4793 108.506 35.0755 107.881C35.5165 107.417 36.0303 106.569 35.9673 105.18C35.8994 103.703 35.7976 102.212 35.6959 100.769C35.6183 99.6409 35.5408 98.5225 35.4777 97.4089Z" fill="white"/>
+								<path d="M82.9273 4.10571C78.6622 0.363112 73.1708 -0.876349 67.4614 0.610036C59.7212 2.629 53.9149 10.7436 54.4917 18.7275L54.4868 19.3617C54.482 19.9282 54.4771 20.4947 54.4917 21.0612C54.5498 23.2593 55.8972 24.6827 57.9231 24.6827C57.9231 24.6827 57.9231 24.6827 57.928 24.6827C59.5274 24.6827 61.2577 23.7241 61.3255 21.0418C61.3449 20.3397 61.3255 19.6474 61.3061 18.9744C61.3013 18.713 61.2916 18.4515 61.2867 18.1949C61.248 16.0258 61.7714 14.0359 62.8861 12.1186C65.2804 8.00323 70.0156 5.96006 74.3922 7.1511C78.8997 8.37604 82.0645 12.506 82.0839 17.1975C82.1033 21.9375 79.4958 25.3073 74.7363 26.692C69.3565 28.251 65.9347 33.3541 66.2255 39.3819C66.3176 41.3089 67.5826 42.5339 69.5213 42.5726C69.5504 42.5726 69.5843 42.5726 69.6134 42.5726C71.4648 42.5726 72.7346 41.4106 72.9285 39.5224C72.9527 39.2706 72.9576 39.0382 72.9576 38.83C72.9576 38.709 72.9576 38.5831 72.9673 38.462C73.1902 35.5716 74.4116 33.9012 76.801 33.2088C83.8869 31.1463 87.9581 26.3434 88.8887 18.9357C89.5527 13.6825 87.2118 7.86282 82.9273 4.10571Z" fill="white"/>
+								<path d="M84.638 46.9832C84.3714 45.0949 84.1 43.1486 83.7462 41.2264C83.5475 40.1371 82.9804 39.2414 82.1516 38.6991C81.3955 38.2053 80.4892 38.0455 79.5974 38.2537C77.8041 38.6701 76.8687 40.384 77.2128 42.616C77.2661 42.9694 77.3243 43.3277 77.3825 43.6812C77.6345 45.2595 77.8768 46.7508 77.935 48.2468C78.2113 55.1413 76.4567 61.6049 72.5745 68.0056C72.2837 68.4849 71.9929 68.9642 71.6973 69.4436C69.9864 72.242 68.2174 75.1373 66.807 78.1779C64.7277 82.6564 64.025 87.7305 64.6647 93.6857C64.9071 95.9613 65.1058 98.2853 65.2948 100.537C65.4353 102.183 65.5759 103.829 65.731 105.475C65.8328 106.54 66.235 107.441 66.8894 108.075C67.5097 108.675 68.3143 109 69.1915 109C69.3079 109 69.4242 108.995 69.5405 108.985C70.4565 108.898 71.2708 108.477 71.8233 107.804C72.4534 107.039 72.7296 106.013 72.6133 104.846C72.5212 103.926 72.434 103.006 72.3467 102.086C72.1044 99.5441 71.8572 96.9151 71.5373 94.3296C70.6989 87.5223 71.9154 81.6978 75.2548 76.5269C75.8121 75.6651 76.3501 74.7936 76.8881 73.9221C77.3243 73.2152 77.7605 72.5083 78.2113 71.8111C82.457 65.1393 84.7398 57.6687 84.9918 49.6025L84.9966 49.4718L84.9773 49.3459C84.8561 48.5567 84.7446 47.7675 84.638 46.9832Z" fill="white"/>
+								<path d="M59.1589 40.0305C59.1347 39.5851 59.1056 39.0283 58.9893 38.457C58.2041 34.5449 55.9455 31.2526 52.6207 29.1755C49.3055 27.1081 45.3603 26.5223 41.5072 27.5342C35.7202 29.0496 31.9059 32.8746 30.4713 38.5974C29.9381 40.7277 30.8978 42.5675 32.8074 43.0662C34.8042 43.5891 36.4812 42.461 37.0773 40.2C38.2017 35.9587 41.3812 33.7122 45.7965 34.0414C48.8015 34.2641 50.8323 35.7118 51.8258 38.3456C52.8873 41.1538 52.4074 43.5891 50.4009 45.579C49.354 46.62 48.0842 47.5932 46.6302 48.4792C42.7819 50.8177 40.8044 54.4344 40.4215 59.8522C40.3488 60.8593 40.6833 61.8518 41.3376 62.5732C41.9482 63.2462 42.7722 63.6287 43.6591 63.6529C43.7028 63.6529 43.7415 63.6529 43.7851 63.6529C45.7141 63.6529 47.047 62.428 47.2699 60.4332L47.3232 59.9151C47.3814 59.368 47.4347 58.8451 47.522 58.3416C47.9 56.1532 49.3831 54.8266 51.6513 53.3886C56.6338 50.2415 59.1007 46.0584 59.1928 40.6067V40.5292L59.188 40.4517C59.1734 40.3258 59.1686 40.1854 59.1589 40.0305Z" fill="white"/>
+								<path d="M43.6591 66.0204C42.5541 66.035 41.4781 66.4949 40.7026 67.2889C39.9369 68.0733 39.5249 69.0949 39.5394 70.1697C39.554 71.2736 40.0677 72.392 40.9498 73.2345C41.7786 74.0285 42.84 74.4788 43.8724 74.4788C43.9063 74.4788 43.9402 74.4788 43.9742 74.4788C46.2909 74.411 48.0842 72.5034 48.0551 70.1261C48.0406 68.8722 47.6092 67.8215 46.7998 67.0856C46.0243 66.3739 44.9435 66.0059 43.6591 66.0204Z" fill="white"/>
+								<path d="M69.9186 52.7348C69.938 52.7348 69.9574 52.7348 69.9768 52.7348C71.0091 52.7203 71.9736 52.2894 72.7006 51.5244C73.4615 50.7256 73.8735 49.6217 73.8347 48.4984C73.7572 46.3293 71.9785 44.5864 69.8168 44.6348C68.7942 44.6541 67.8297 45.085 67.1027 45.8452C66.3369 46.6392 65.9152 47.7334 65.9395 48.847C65.9879 50.9676 67.8006 52.7348 69.9186 52.7348Z" fill="white"/>
+								</g>
+								<defs>
+								<clipPath id="clip0_1707_22164">
+								<rect width="89" height="109" fill="white"/>
+								</clipPath>
+								</defs>
+							</svg>}
+							title={idioma === 'es' ? "Evocación Interior" : "Inner Evocation"}
+							text={idioma === 'es' ? "Despertar preguntas en lugar de dar respuestas, invitando a la reflexión personal." : "Arouse questions instead of providing answers, inviting personal reflection."}
+						/>
 					</div>
-
-					{/* The rest of the paragraphs always shown on bigger screens */}
-					<p className="hidden sm:block">
-						Mi sensibilidad musical es muy amplia, crecí escuchando
-						diferentes géneros, y asi descubrí estilos maravillosos
-						de expresión del mismo arte.
-					</p>
-				</div>
-
-				{/* Paragraphs 3 & 4 */}
-				<div className="flex flex-col sm:gap-6 md:w-1/2 xl:w-full">
-					<p className="hidden sm:block">
-						Siento como nuestras moléculas vibran de forma
-						particular con cada onda de sonido que esta produce, me
-						inspira la reacción singular que se genera en todos
-						nuestros seres.
-					</p>
-					<p className="hidden sm:block">
-						Espero poder acompañarte y generar en ti la misma
-						alegría que me produce la creación de mi contenido,
-						siempre en mi mente poder compartirla contigo.
-					</p>
+				</span>
+			</div>
+			<img
+				src="/assets/about_page/bg_item1.svg"
+				alt="Background Item 1"
+				className="absolute left-[-11%] lg:left-[-2%] xl:left-0 w-[26%] lg:w-[15%] xl:w-[15%] h-auto translate-y-[20rem] lg:translate-y-[15rem] xl:translate-y-[12rem]"
+			/>
+			<img
+				src="/assets/about_page/bg_item1.svg"
+				alt="Background Item 1"
+				className="lg:hidden absolute right-[-13%] lg:right-[-2%] xl:right-0 w-[22%] lg:w-[15%] xl:w-[15%] h-auto translate-y-[33rem] lg:translate-y-[15rem] xl:translate-y-[17.5rem]"
+			/>
+			<img
+				src="/assets/about_page/bg_item4.svg"
+				alt="Background Item 4"
+				className="hidden lg:block absolute lg:right-[-4%] xl:right-0 lg:w-[21%] xl:w-[16%] h-auto lg:translate-y-[13.5rem] xl:translate-y-[16rem]"
+			/>
+			<div className="lg:absolute z-0 mt-12 w-screen lg:w-full mt-[-155px] md:mt-16 lg:mt-[16%] xl:mt-[17%] flex justify-center">
+				<div className="relative w-screen lg:w-full flex justify-center">
+					<div className="absolute inset-0 flex items-center pointer-events-none flex-col translate-y-[24rem] lg:translate-y-[28rem] xl:translate-y-[25rem]">
+						<CenterItem
+							titles={
+								idioma === 'es' ? [`Estilo<br/> Libre`, `Atmósferas<br/> Emocionales`, `Narrativa<br/> Universal`] : [`Freestyle`, `Emotional<br/> Atmospheres`, `Universal<br/> Narrative`]
+							}
+							descriptions={
+								idioma === 'es' ? [`Sin etiquetas de género ni límites temporales.`, `A través de sonidos que variados como el Rock, Pop, Jazz, Blues, Rock Progresivo, Música Electrónica, Hip Hop, Reggae, Port Punk, etc. y otras texturas musicales. Estratonico nos invita a un lugar donde la música trasciende etiquetas y rompe barreras temporales. Porque para él no existen géneros ni épocas: solo existe la fuerza de una canción honesta.`, `Letras poéticas que exploran la amistad, el desamor, la esperanza y la búsqueda de sentido.`] : [`Without genre labels or  time limits.`, `Through sounds as varied as Rock, Pop, Jazz, Blues, Progressive Rock, Electronic Music, Hip Hop, Reggae, Port Punk, etc., and other musical textures. Estratonico invites us to a place where music transcends labels and breaks down time barriers. Because for him, genres and eras don't exist: there is only the power of an honest song.`, `Poetic lyrics that explore friendship, heartbreak, hope, and the search for meaning.`]
+							}
+							className=""
+							idioma={idioma}
+							vectorTitle={idioma === 'es' ? 'Bienvenido al universo' : 'Welcome to the universe'}
+							vectorTitleBold={idioma === 'es' ? 'de Estratonico' : 'of Estratonico'}
+							vectorDescription={idioma === 'es' ? 'Un camino donde cada acorde es un encuentro, cada palabra una promesa, y cada canción un puente hacia la inmortalidad.' : 'A path where every chord is an encounter, every word a promise, and every song a bridge to immortality.'}
+						/>
+					</div>
 				</div>
 			</div>
+			<img
+				src="/assets/about_page/bg_item2.svg"
+				alt="Background Item 2"
+				className="absolute bottom-0 bottom-[13%] lg:bottom-[-9%] xl:bottom-[-7%] left-[-11%] lg:left-[-2%] xl:left-[-4%] w-[26%] lg:w-[15%] h-auto"
+			/>
+			<img
+				src="/assets/about_page/bg_item2.svg"
+				alt="Background Item 2"
+				className="lg:hidden absolute right-[-8%] lg:right-[2%] xl:right-0 bottom-[12%] lg:bottom-[7%] xl:bottom-[7%] w-[26%] lg:w-[15%] xl:w-[15%] h-auto"
+			/>
+			<img
+				src="/assets/about_page/bg_item3.svg"
+				alt="Background Item 3"
+				className="absolute bottom-4 lg:bottom-8 xl:bottom-8 right-4 lg:right-[3rem] xl:right-[3rem] w-[62%] lg:w-[26%] xl:w-[23%] h-auto"
+			/>
 		</section>
 	);
 }
