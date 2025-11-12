@@ -1,4 +1,6 @@
 import Cover from "@/Components/AboutMe/Cover";
+import LastData from "@/Components/AboutMe/LastData";
+import MiddleData from "@/Components/AboutMe/MiddleData";
 import MyStory from "@/Components/AboutMe/MyStory";
 
 function page() {
@@ -6,6 +8,8 @@ function page() {
 		<main>
 			<Cover />
 			<MyStory />
+			<MiddleData />
+			<LastData />
 		</main>
 	);
 }

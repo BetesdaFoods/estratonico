@@ -107,34 +107,34 @@ const navigation = {
 				name: "Español",
 				nameEN: "Spanish",
 				href: "es",
-				logo: "/assets/Flag_of_Spain.svg"
+				logo: "/assets/spanish.svg"
 			},
 			{
 				titleEN: "Language",
 				name: "English",
 				nameEN: "English",
 				href: "en",
-				logo: "/assets/Flag_of_the_United_States.svg"
+				logo: "/assets/english.svg"
 			},
 		],
 		Legal: [
 			{
 				titleEN: "Legal",
-				name: "Términos y Condiciones",
-				nameEN: "Terms and Conditions",
+				name: "Términos y\n Condiciones",
+				nameEN: "Terms and\n Conditions",
 				href: "/legal/terminos-de-uso",
 				logo: "",
 			},
 			{
 				titleEN: "Legal",
-				name: "Política de privacidad",
-				nameEN: "Privacy Policy",
+				name: "Política de\n privacidad",
+				nameEN: "Privacy\n Policy",
 				href: "/legal/politica-de-privacidad",
 				logo: "",
 			},
 			{
 				titleEN: "Legal",
-				name: "Preguntas Frecuentes",
+				name: "Preguntas\n Frecuentes",
 				nameEN: "FAQs",
 				href: "/legal/preguntas-frecuentes",
 				logo: "" },
@@ -194,6 +194,7 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV === 'production';
 	return (
 		<html
 			lang="en"
@@ -230,7 +231,7 @@ export default function RootLayout({
 						<Footer navigation={navigation.footer} />
 					</div>
 				</LanguageProvider>
-				<SpeedInsights />
+					{isVercel ? <SpeedInsights /> : null}
 				<Analytics />
 			</body>
 		</html>

@@ -20,7 +20,7 @@ export default function Hero() {
 			<div className="relative mt-[120px] flex justify-center items-center">
 				{videoSupported ? (
 					<>
-						<div className="hidden sm:block w-[95%] rounded-[40px] overflow-hidden sm:h-[calc(70vh+40px)] md:h-[calc(75vh+50px)] lg:h-[calc(80vh+50px)]">
+						<div className="hidden sm:block w-[92%] lg:w-[88%] xl:w-[92%] rounded-[40px] overflow-hidden sm:h-[calc(70vh+40px)] md:h-[calc(75vh+50px)] lg:h-[calc(80vh+50px)]">
 							<video
 								autoPlay
 								muted
@@ -39,7 +39,7 @@ export default function Hero() {
 								{idioma === 'es' ? 'Tu navegador no soporta video en background.' : 'Your browser does not support background video.'}
 							</video>
 						</div>
-						<div className="sm:hidden w-[95%] rounded-[16px] overflow-hidden aspect-[4/5] shadow-[0_0_30px_-10px_rgba(0,0,0,0.6)]">
+						<div className="sm:hidden w-[92%] lg:w-[88%] xl:w-[92%] rounded-[16px] overflow-hidden aspect-[4/5] shadow-[0_0_30px_-10px_rgba(0,0,0,0.6)]">
 							<video
 								autoPlay
 								muted
@@ -61,7 +61,7 @@ export default function Hero() {
 					</>
 				) : (
 					<>
-						<div className="hidden sm:block w-[95%] rounded-[40px] overflow-hidden sm:h-[calc(70vh+40px)] md:h-[calc(75vh+50px)] lg:h-[calc(80vh+50px)]">
+						<div className="hidden sm:block w-[92%] rounded-[40px] overflow-hidden sm:h-[calc(70vh+40px)] md:h-[calc(75vh+50px)] lg:h-[calc(70vh+50px)]">
 							<img
 								id="banner-img"
 								className="w-full h-full object-cover shadow-[0_0_40px_-10px_rgba(0,0,0,0.6)]"
@@ -70,7 +70,7 @@ export default function Hero() {
 								style={{borderRadius: '40px'}}
 							/>
 						</div>
-						<div className="sm:hidden w-[95%] rounded-[16px] overflow-hidden aspect-[4/5] shadow-[0_0_30px_-10px_rgba(0,0,0,0.6)]">
+						<div className="sm:hidden w-[92%] rounded-[16px] overflow-hidden aspect-[4/5] shadow-[0_0_30px_-10px_rgba(0,0,0,0.6)]">
 							<img
 								id="banner-img"
 								className="w-full h-full object-cover"
@@ -82,18 +82,18 @@ export default function Hero() {
 					</>
 				)}
 
-				<div className="w-[92%] absolute top-[4%] left-[4%] flex-col text-left">
+				<div className="w-full absolute top-[5.5%] left-[8.5%] flex-col text-left">
 					<div className="font-orbitron font-black text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-						<h1 className="leading-tight text-[28px] sm:text-[64px] lg:text-[64px]">
+						<h1 className="leading-[30px] lg:leading-[54px] text-[27px] sm:text-[64px] lg:text-[54px]">
 							{idioma === 'es' ? 'Desentrañando el' : 'Unraveling the'}
 							<br />
 							{idioma === 'es' ? 'alma a través' : 'soul through'}
 							<br />
-							{idioma === 'es' ? 'del sonido.' : 'my sound.'}
+							{idioma === 'es' ? 'del sonido' : 'my sound'}
 						</h1>
 					</div>
 
-					<p className="text-[0.82rem] sm:text-2xl leading-tight lg:text-[28px] mt-1 sm:mt-16 lg:mt-5 text-white font-roboto drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+					<p className="text-[0.82rem] sm:text-2xl leading-tight lg:text-[23px] mt-1 sm:mt-16 lg:mt-3 text-white font-roboto drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
 						{idioma === 'es' ? 'Creo experiencias inolvidables a' : 'I create unforgettable experiences'}
 						<br />
 						{idioma === 'es' ? 'través de mi música.' : 'through my music.'}
@@ -101,14 +101,14 @@ export default function Hero() {
 				</div>
 
 				{/* Call to Action */}
-				<div className="w-full flex right-[5%] bottom-[8%] justify-end absolute">
+				<div className="w-full flex right-[10%] bottom-[6%] lg:bottom-[12%] justify-end absolute">
 					<div className="text-right">
-						<p className="uppercase text-[0.82rem] lg:pl-32 sm:text-lg lg:text-[20px] mb-4 text-white font-roboto">
+						<p className="uppercase text-[0.82rem] lg:pl-32 sm:text-lg lg:text-[21px] mb-1 lg:mb-4 text-white font-roboto">
 							{idioma === 'es' ? '¿trabajamos ': 'LET\'S WORK '}<span className="font-black">{idioma === 'es' ? 'juntos' : 'together'}</span>?
 						</p>
 						<Button
 							href="/contacto"
-							className="uppercase py-4 px-6 lg:px-12 sm:py-5 font-orbitron sm:text-[20px] font-black"
+							className="uppercase py-4 px-4 lg:px-12 sm:py-4 font-orbitron text-[15px] lg:text-[17px] font-black"
 						>
 							{idioma === 'es' ? 'Contáctame ya' : 'Contact me now'}
 						</Button>
@@ -122,18 +122,18 @@ export default function Hero() {
 				<img
 					src="/assets/Frame_626.svg"
 					alt="circle left"
-					className="absolute opacity-80 pointer-events-none select-none left-[4%] lg:left-[6%] xl:left-[10%] top-0 md:w-[160px] lg:w-[200px] xl:w-[320px] w-[60px]"
+					className="absolute opacity-80 pointer-events-none select-none left-[4%] lg:left-[6%] xl:left-[8%] top-0 md:w-[160px] lg:w-[200px] xl:w-[250px] w-[60px]"
 					style={{color: 'transparent'}}
 				/>
 				<img
 					src="/assets/Frame_627.svg"
 					alt="circle right"
-					className="absolute opacity-100 pointer-events-none select-none right-[4%] lg:right-[6%] xl:right-[10%] bottom-0 md:w-[160px] lg:w-[200px] xl:w-[320px] w-[60px]"
+					className="absolute opacity-100 pointer-events-none select-none right-[4%] lg:right-[6%] xl:right-[8%] bottom-0 md:w-[160px] lg:w-[200px] xl:w-[250px] w-[60px]"
 					style={{color: 'transparent'}}
 				/>
 				<div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
 					<span className="w-full flex items-center justify-center">
-						<HeaderMusic />
+						<HeaderMusic className="w-[250px] md:w-[400px] lg:w-[400px] xl:w-[450px]" />
 					</span>
 				</div>
 			</div>
