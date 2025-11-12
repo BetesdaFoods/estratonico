@@ -177,7 +177,10 @@ function NewsCard({
             </p>
         )}
 		<ButtonOval
-			children={idioma === "es" ?
+			href={`/noticias/${article.id}`}
+			className="mt-3 lg:mt-4 xl:mt-2 px-4 py-2 lg:py-3 xl:py-2 uppercase xl:text-[10px]"
+		>
+			{idioma === "es" ?
 				(
 					<>
 						<span className="hidden lg:inline-block">
@@ -226,10 +229,7 @@ function NewsCard({
 						</span>
 					</>
 				)}
-			href={`/noticias/${article.id}`}
-			className="mt-3 lg:mt-4 xl:mt-2 px-4 py-2 lg:py-3 xl:py-2 uppercase xl:text-[10px]"
-			
-		/>	
+		</ButtonOval>
     </div>
 </Link>
 	);
