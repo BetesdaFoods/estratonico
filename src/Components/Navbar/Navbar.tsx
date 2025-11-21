@@ -9,6 +9,7 @@ import { LogoDisplayerSVG } from "@/Components/SVGLogo/LogoDisplayerSV";
 import NavigationPanel from "./NavigationPanel";
 import UpdateLanguagePanel from "./UpdateLanguagePanel";
 import NavLinkDecorator from "./NavLinkDecorator";
+import NavigationPanelMobile from "./NavigationPanelMobile";
 
 interface NavbarProps {
 	navigation: Record<string, { name: string; href: string }>;
@@ -81,7 +82,7 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 									className="block"
 								>
 									<div className="sm:block lg:block w-52  transition-all duration-300">
-										<Estratonico className="2xl:w-[12rem] xl:w-[15rem] lg:w-[10rem] w-[10rem] 2xl:mb-4" />
+										<Estratonico className="2xl:w-[12rem] xl:w-[15rem] lg:w-[10rem] w-[13rem] 2xl:mb-4" />
 									</div>
 								</Link>
 							</div>
@@ -108,7 +109,8 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 								as="div"
 								className="sm:pb-5 pb-3 absolute right-3 sm:right-4 lg:right-14"
 							>
-								<div className="flex items-center justify-between gap-2 sm:gap-2">
+								{/* WEB Y TABLET */}
+								<div className="flex items-center justify-between gap-2 sm:gap-2 hidden md:flex">
 									{/* LANGUAGE SELECTION */}
 									<Popover className="flex items-center">
 										{() => (
@@ -160,6 +162,27 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 												<NavigationPanel
 													links={musicPlatforms}
 													socials={false}
+												/>
+											</>
+										)}
+									</Popover>
+								</div>
+								{/* MOBILE */}
+								<div className="flex items-center justify-between gap-2 sm:gap-2 md:hidden">
+									{/* GLOBAL */}
+									<Popover className="flex items-center">
+										{() => (
+											<>
+												<PopoverButton className="focus:outline-none">
+													<LogoDisplayerSVG
+														isGlobal={true}
+														isOpen={true}
+													/>
+												</PopoverButton>
+												<NavigationPanelMobile
+													linksMusic={musicPlatforms}
+													linksSocials={socials}
+													
 												/>
 											</>
 										)}
