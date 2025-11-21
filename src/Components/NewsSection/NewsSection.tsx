@@ -29,11 +29,12 @@ async function NewsSection() {
 							{latest.summary}
 						</h1>
 					</span>
+					{/* ReadArticleButton moved outside Link to avoid nested anchor (<a> inside <a>) */}
 					<span className="relative hidden sm:block items-center px-0 py-14 bottom-6">
-						<ReadArticleButton link={`/noticias/${latest.id}`} />
+						{/* placeholder: button moved outside link */}
 					</span>
 				</div>
-				<div className="relative w-full max-h-[200px] lg:max-h-[500px] xl:max-h-[800px] aspect-[742/695]">
+				<div className="relative w-full max-h-[200px] lg:max-h-[500px] xl:max-h-[480px] aspect-[742/695]">
 					<Image
 						src={latest.coverImage}
 						alt="Estratonico"
@@ -42,6 +43,10 @@ async function NewsSection() {
 					/>
 				</div>
 			</Link>
+			{/* Place ReadArticleButton outside the Link to avoid nested <a> elements */}
+			<div className="relative hidden sm:block items-center px-0 py-14 bottom-6">
+				<ReadArticleButton link={`/noticias/${latest.id}`} />
+			</div>
 
 			{/* NEWS TIMELINE */}
 			<div className="w-full pt-4 lg:pt-8 xl:pt-14 h-auto flex flex-col">
@@ -77,12 +82,12 @@ async function NewsSection() {
 						);
 					})}
 				</div>
-				<div className="xl:flex flex-col gap-9 2xl:gap-12 hidden flex-1 justify-evenly">
+				<div className="xl:flex flex-col gap-9 2xl:gap-10 hidden flex-1 justify-evenly">
 					{Array.from({ length: Math.ceil(Math.min(6, articles.length) / 4) }).map((_, idx) => {
 						const start = idx * 4;
 						const cuarteto = articles.slice(start, start + 4);
 						return (
-							<div key={idx} className="flex xl:flex-row gap-5 2xl:gap-12 flex-1 justify-evenly">
+							<div key={idx} className="flex xl:flex-row gap-5 2xl:gap-10 flex-1 justify-evenly">
 								{cuarteto.map((article) => (
 									<NewsCard key={article.id} article={article} />
 								))}
