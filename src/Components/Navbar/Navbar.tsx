@@ -136,9 +136,13 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 									<Popover className="flex items-center">
 										{() => (
 											<>
-												<PopoverButton className="focus:outline-none">
+												<PopoverButton
+													className="focus:outline-none">
 													<LogoDisplayerSVG
+														isLanguage={true}
 														isOpen={true}
+														idiomaSelected={idiomaSelected}
+														isInstagram={false}
 													/>
 												</PopoverButton>
 												{/* SOCIAL MEDIA NAV MENU */}
@@ -149,16 +153,16 @@ const Navbar = ({ navigation, socials, musicPlatforms, idioma, setIdioma, idioma
 											</>
 										)}
 									</Popover>
-									{/* MUSIC PLATFORMS */}
+									{/* SOCIAL MEDIA */}
 									<Popover className="flex items-center">
 										{() => (
 											<>
 												<PopoverButton className="focus:outline-none">
 													<LogoDisplayerSVG
-														isInstagram={false}
 														isOpen={true}
 													/>
 												</PopoverButton>
+												{/* SOCIAL MEDIA NAV MENU */}
 												<NavigationPanel
 													links={musicPlatforms}
 													socials={false}
