@@ -3,4 +3,5 @@ export interface LogoDisplayerSVGProps {
     isOpen?: boolean;
     isLanguage?: boolean;
     idiomaSelected?: string;
+    isGlobal?: boolean;
 }
